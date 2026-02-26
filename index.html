@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>waren.build — Open Source Portfolio</title>
-    <meta name="description" content="Waren Gonzaga's open source portfolio. 50+ shipped projects in AI, blockchain, developer tools, and more." />
+    <meta name="description" content="Waren Gonzaga's open source portfolio. 44+ shipped projects in AI, developer tools, SDKs, bots, and more." />
     <meta name="theme-color" content="#0a0a0f" />
     <meta property="og:title" content="waren.build — Open Source Portfolio" />
-    <meta property="og:description" content="50+ shipped open source projects by Waren Gonzaga" />
+    <meta property="og:description" content="44+ shipped open source projects by Waren Gonzaga" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://waren.build" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,27 +20,15 @@
       <header class="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
-          <div class="hero-badge">OPEN SOURCE PORTFOLIO</div>
           <h1 class="hero-title">
             <span class="hero-name">Waren Gonzaga</span>
             <span class="hero-tagline">builds things.</span>
           </h1>
           <p class="hero-desc">
-            Self-taught software engineer shipping <strong>50+ open source projects</strong> across AI, blockchain, developer tools, and more. Founder of <a href="https://wgtechlabs.com" target="_blank" rel="noopener">WG Technology Labs</a>.
+            Self-taught software engineer shipping <strong>open source projects</strong> across AI, developer tools, SDKs, bots, and more. Founder of <a href="https://github.com/wgtechlabs" target="_blank" rel="noopener">WG Tech Labs</a>.
           </p>
-          <div class="hero-stats" id="hero-stats">
-            <div class="stat">
-              <span class="stat-value" id="stat-repos">—</span>
-              <span class="stat-label">Repositories</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value" id="stat-stars">—</span>
-              <span class="stat-label">Total Stars</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value" id="stat-languages">—</span>
-              <span class="stat-label">Languages</span>
-            </div>
+          <div class="hero-stats">
+            <span class="stat" id="project-count">44 projects</span>
           </div>
           <div class="hero-links">
             <a href="https://github.com/warengonzaga" target="_blank" rel="noopener" class="btn btn-primary">
@@ -68,12 +56,12 @@
         <div class="container">
           <div class="filter-bar">
             <div class="filter-tabs" id="filter-tabs">
-              <button class="filter-tab active" data-filter="all">All Projects</button>
+              <button class="filter-tab active" data-filter="all">All</button>
               <button class="filter-tab" data-filter="featured">Featured</button>
-              <button class="filter-tab" data-filter="ai">AI</button>
-              <button class="filter-tab" data-filter="web3">Web3</button>
-              <button class="filter-tab" data-filter="tools">Tools</button>
-              <button class="filter-tab" data-filter="sdk">SDKs</button>
+              <button class="filter-tab" data-filter="labs">Labs</button>
+              <button class="filter-tab" data-filter="community">Community</button>
+              <button class="filter-tab" data-filter="projects">Projects</button>
+              <button class="filter-tab" data-filter="legacy">Legacy</button>
             </div>
             <div class="filter-search">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -86,9 +74,7 @@
       <!-- Projects grid -->
       <main class="projects-section">
         <div class="container">
-          <div class="projects-grid" id="projects-grid">
-            <!-- Rendered by JS -->
-          </div>
+          <div class="projects-grid" id="projects-grid"></div>
           <div class="projects-empty" id="projects-empty" style="display:none;">
             <p>No projects match your search.</p>
           </div>
@@ -100,7 +86,7 @@
         <div class="container">
           <div class="footer-content">
             <p class="footer-text">
-              Built with <span class="footer-heart">&hearts;</span> by <a href="https://github.com/warengonzaga" target="_blank" rel="noopener">Waren Gonzaga</a>
+              Built by <a href="https://github.com/warengonzaga" target="_blank" rel="noopener">Waren Gonzaga</a>
             </p>
             <p class="footer-sub">waren.build &mdash; shipping open source since 2018</p>
           </div>

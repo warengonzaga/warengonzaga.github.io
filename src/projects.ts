@@ -1,104 +1,352 @@
+export type Category = "featured" | "labs" | "community" | "projects" | "legacy";
+
 export interface Project {
   name: string;
   description: string;
-  url: string;
-  stars: number;
-  language: string;
-  homepage: string;
-  topics: string[];
-  featured: boolean;
-  category: string[];
+  repo: string;
+  category: Category;
+  language?: string;
 }
 
-// Language colors from GitHub
+export const categoryMeta: Record<Category | "all", { label: string; color: string }> = {
+  all: { label: "All", color: "#e4e4ef" },
+  featured: { label: "Featured", color: "#06b6d4" },
+  labs: { label: "Labs", color: "#8b5cf6" },
+  community: { label: "Community", color: "#22c55e" },
+  projects: { label: "Projects", color: "#f59e0b" },
+  legacy: { label: "Legacy", color: "#71717a" },
+};
+
 export const langColors: Record<string, string> = {
   TypeScript: "#3178c6",
   JavaScript: "#f1e05a",
-  PHP: "#4F5D95",
-  SCSS: "#c6538c",
   CSS: "#563d7c",
   HTML: "#e34c26",
-  Batchfile: "#C1F12E",
+  PHP: "#4F5D95",
+  Batch: "#C1F12E",
+  YAML: "#cb171e",
+  Markdown: "#083fa1",
   Python: "#3572A5",
-  Shell: "#89e051",
   Go: "#00ADD8",
   Rust: "#dea584",
 };
 
-// Featured projects from profile README
-const FEATURED_NAMES = [
-  "css-text-portrait-builder",
-  "wifi-passview",
-  "tinyclaw",
-  "magic-commit",
-  "magic-release",
-  "buymeacoffee.js",
-  "gathertown.js",
-  "wrn-cleaner",
-  "fork-corner",
-  "thirdweb-wp",
-  "daisy.js",
-  "awesome-thirdweb",
+export const projects: Project[] = [
+  // ── Featured (Current Projects) ──
+  {
+    name: "Magic Commit",
+    description: "AI-powered Git commit message generator",
+    repo: "warengonzaga/magic-commit",
+    category: "featured",
+    language: "TypeScript",
+  },
+  {
+    name: "Magic Release",
+    description: "AI-powered release notes generator",
+    repo: "warengonzaga/magic-release",
+    category: "featured",
+    language: "TypeScript",
+  },
+  {
+    name: "TinyClaw",
+    description: "Ultra-minimal AI companion that learns",
+    repo: "warengonzaga/tinyclaw",
+    category: "featured",
+    language: "TypeScript",
+  },
+
+  // ── Labs (WG Tech Labs) ──
+  {
+    name: "GitHub Copilot Chat Modes",
+    description: "AI agents for smarter open-source projects",
+    repo: "wgtechlabs/github-copilot-chatmodes",
+    category: "labs",
+    language: "Markdown",
+  },
+  {
+    name: "Clean Commit",
+    description: "Clean code deserves clean commits",
+    repo: "wgtechlabs/clean-commit",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Forum Support Discord Bot",
+    description: "Forum-based support bot for Discord",
+    repo: "wgtechlabs/forum-support-discord-bot",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Unthread Discord Bot",
+    description: "Unthread ticketing system for Discord",
+    repo: "wgtechlabs/unthread-discord-bot",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Log Engine",
+    description: "Node.js logging solution",
+    repo: "wgtechlabs/log-engine",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Secrets Engine",
+    description: "Secure secret storage SDK for TypeScript",
+    repo: "wgtechlabs/secrets-engine",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Config Engine",
+    description: "Fast, Bun-first configuration SDK",
+    repo: "wgtechlabs/config-engine",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Unthread Telegram Bot",
+    description: "Telegram to Unthread support tickets",
+    repo: "wgtechlabs/unthread-telegram-bot",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Unthread WhatsApp Bot",
+    description: "WhatsApp to Unthread support tickets",
+    repo: "wgtechlabs/unthread-whatsapp-bot",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Container Build Flow",
+    description: "Docker container build automation action",
+    repo: "wgtechlabs/container-build-flow-action",
+    category: "labs",
+    language: "YAML",
+  },
+  {
+    name: "Package Build Flow",
+    description: "NPM package build automation action",
+    repo: "wgtechlabs/package-build-flow-action",
+    category: "labs",
+    language: "YAML",
+  },
+  {
+    name: "Release Build Flow",
+    description: "Automated release creation action",
+    repo: "wgtechlabs/release-build-flow-action",
+    category: "labs",
+    language: "YAML",
+  },
+  {
+    name: "Unthread Webhook Server",
+    description: "Unthread webhook server",
+    repo: "wgtechlabs/unthread-webhook-server",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Nuvex",
+    description: "Structured memory SDK for AI agents",
+    repo: "wgtechlabs/nuvex",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Unthread Webhook SDK",
+    description: "Unthread webhook TypeScript SDK",
+    repo: "wgtechlabs/unthread-webhook-sdk",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "Is Railway",
+    description: "Detect if running on Railway platform",
+    repo: "wgtechlabs/is-railway",
+    category: "labs",
+    language: "TypeScript",
+  },
+  {
+    name: "OSV Framework",
+    description: "Open Sponsor Value Framework",
+    repo: "wgtechlabs/osv-framework",
+    category: "labs",
+    language: "Markdown",
+  },
+  {
+    name: "Zentrynel",
+    description: "Discord moderation bot",
+    repo: "wgtechlabs/zentrynel",
+    category: "labs",
+    language: "TypeScript",
+  },
+
+  // ── Community ──
+  {
+    name: "COVID-19 Tracker CLI",
+    description: "COVID-19 statistics tracker for the terminal",
+    repo: "OSSPhilippines/covid19-tracker-cli",
+    category: "community",
+    language: "JavaScript",
+  },
+  {
+    name: "Matuto",
+    description: "Web3 educational browser extension",
+    repo: "Web3Philippines/matuto",
+    category: "community",
+    language: "TypeScript",
+  },
+
+  // ── Projects (Open Source) ──
+  {
+    name: "CSS Text Portrait Builder",
+    description: "Create stunning portraits using pure CSS",
+    repo: "warengonzaga/css-text-portrait-builder",
+    category: "projects",
+    language: "CSS",
+  },
+  {
+    name: "GitHub Repo Banner",
+    description: "Customizable GitHub repository banners",
+    repo: "warengonzaga/github-repo-banner",
+    category: "projects",
+    language: "HTML",
+  },
+  {
+    name: "WiFi Passview",
+    description: "WiFi password viewer for Windows",
+    repo: "warengonzaga/wifi-passview",
+    category: "projects",
+    language: "Batch",
+  },
+  {
+    name: "WRN Cleaner",
+    description: "Windows maintenance and cleanup tool",
+    repo: "warengonzaga/wrn-cleaner",
+    category: "projects",
+    language: "Batch",
+  },
+  {
+    name: "Buy Me a Coffee.js",
+    description: "Buy Me a Coffee JavaScript SDK",
+    repo: "warengonzaga/buymeacoffee.js",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Gather Town.js",
+    description: "Gather Town JavaScript SDK",
+    repo: "warengonzaga/gathertown.js",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Daisy.js",
+    description: "Web animation plugin for particle systems",
+    repo: "warengonzaga/daisy.js",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Fork Corner",
+    description: "GitHub/GitLab fork corner label for your site",
+    repo: "warengonzaga/fork-corner",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Love Cards",
+    description: "Interactive love cards web app",
+    repo: "warengonzaga/love-cards",
+    category: "projects",
+    language: "HTML",
+  },
+  {
+    name: "thirdweb WP",
+    description: "thirdweb WordPress plugin",
+    repo: "warengonzaga/thirdweb-wp",
+    category: "projects",
+    language: "PHP",
+  },
+  {
+    name: "IPFS Support Extension",
+    description: "IPFS browser support extension",
+    repo: "warengonzaga/ipfs-support-extension",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Arweave Support Extension",
+    description: "Arweave browser support extension",
+    repo: "warengonzaga/arweave-support-extension",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Is It Relay",
+    description: "Relay Protocol detector utility",
+    repo: "warengonzaga/is-it-relay",
+    category: "projects",
+    language: "TypeScript",
+  },
+  {
+    name: "Relay Protocol Indexer App",
+    description: "Relay Protocol data indexer application",
+    repo: "warengonzaga/relay-protocol-indexer-app",
+    category: "projects",
+    language: "TypeScript",
+  },
+  {
+    name: "Relay Protocol Stats",
+    description: "Relay Protocol analytics dashboard",
+    repo: "warengonzaga/relay-protocol-stats",
+    category: "projects",
+    language: "TypeScript",
+  },
+  {
+    name: "PCSO 2D Lotto Generator",
+    description: "PCSO 2D lotto number generator",
+    repo: "warengonzaga/pcso-2d-lotto-generator",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "ExpandURL CLI",
+    description: "CLI tool to expand shortened URLs",
+    repo: "warengonzaga/expandurl-cli",
+    category: "projects",
+    language: "TypeScript",
+  },
+  {
+    name: "GitHub Labels Template",
+    description: "Apply curated GitHub labels to your repo",
+    repo: "warengonzaga/github-labels-template",
+    category: "projects",
+    language: "JavaScript",
+  },
+  {
+    name: "Gumroad TS",
+    description: "Gumroad TypeScript SDK",
+    repo: "warengonzaga/gumroad-ts",
+    category: "projects",
+    language: "TypeScript",
+  },
+  {
+    name: "Contribute Now",
+    description: "Git workflow automation CLI tool",
+    repo: "warengonzaga/contribute-now",
+    category: "projects",
+    language: "JavaScript",
+  },
+
+  // ── Legacy ──
+  {
+    name: "Animate.css",
+    description: "Cross-browser library of CSS animations",
+    repo: "animate-css/animate.css",
+    category: "legacy",
+    language: "CSS",
+  },
 ];
-
-// Category tagging
-function categorize(repo: { name: string; description: string; topics: string[] }): string[] {
-  const cats: string[] = [];
-  const text = `${repo.name} ${repo.description} ${repo.topics.join(" ")}`.toLowerCase();
-
-  if (/\bai\b|magic-|tinyclaw|gpt|llm|autonomous/.test(text)) cats.push("ai");
-  if (/thirdweb|web3|nft|blockchain|crypto|ipfs|relay/.test(text)) cats.push("web3");
-  if (/sdk|\.js$|api|client|library/.test(text)) cats.push("sdk");
-  if (/tool|cli|util|clean|fix|batch|pass|extension|banner|faucet/.test(text)) cats.push("tools");
-
-  if (cats.length === 0) cats.push("tools");
-  return cats;
-}
-
-interface GitHubRepo {
-  name: string;
-  description: string | null;
-  html_url: string;
-  stargazers_count: number;
-  language: string | null;
-  homepage: string | null;
-  topics: string[];
-  fork: boolean;
-  archived: boolean;
-}
-
-export async function fetchProjects(): Promise<Project[]> {
-  const pages = [1, 2, 3];
-  const results = await Promise.all(
-    pages.map((page) =>
-      fetch(
-        `https://api.github.com/users/warengonzaga/repos?per_page=100&sort=stars&direction=desc&type=owner&page=${page}`
-      ).then((r) => r.json() as Promise<GitHubRepo[]>)
-    )
-  );
-
-  const repos = results.flat();
-
-  return repos
-    .filter((r) => !r.fork && !r.archived && r.name !== "warengonzaga")
-    .map((r) => ({
-      name: r.name,
-      description: (r.description || "").replace(/[\u{1F600}-\u{1F6FF}\u{2600}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2700}-\u{27BF}]/gu, "").trim(),
-      url: r.html_url,
-      stars: r.stargazers_count,
-      language: r.language || "",
-      homepage: r.homepage || "",
-      topics: r.topics || [],
-      featured: FEATURED_NAMES.includes(r.name),
-      category: categorize({
-        name: r.name,
-        description: r.description || "",
-        topics: r.topics || [],
-      }),
-    }))
-    .sort((a, b) => {
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
-      return b.stars - a.stars;
-    });
-}
