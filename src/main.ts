@@ -238,10 +238,11 @@ if (heroName) {
 }
 
 // --- Wandering Star with sparkle trail ---
-const wanderingStar = document.getElementById("wandering-star");
+const _wanderingStar = document.getElementById("wandering-star");
 const hero = document.querySelector(".hero") as HTMLElement;
 
-if (wanderingStar && hero) {
+if (_wanderingStar && hero) {
+  const wanderingStar = _wanderingStar; // capture as non-null for closures
   const sparkleColors = ["#fa3768", "#79e2ff", "#fff", "#fac832", "#8b5cf6"];
   let isMoving = false;
 
