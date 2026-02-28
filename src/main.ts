@@ -237,5 +237,199 @@ if (heroName) {
   });
 }
 
+// --- Wandering Star with sparkle trail ---
+const wanderingStar = document.getElementById("wandering-star");
+const hero = document.querySelector(".hero") as HTMLElement;
+
+if (wanderingStar && hero) {
+  const sparkleColors = ["#fa3768", "#79e2ff", "#fff", "#fac832", "#8b5cf6"];
+  let isMoving = false;
+
+  // Safe zones around the edges, avoiding center content and scroll indicator.
+  // Ordered clockwise so adjacent zones share edges (no crossing the center).
+  const zones = [
+    { top: [5, 15],  left: [5, 40] },    // 0: top-left
+    { top: [5, 15],  left: [60, 95] },   // 1: top-right
+    { top: [20, 55], left: [82, 95] },   // 2: right-upper
+    { top: [58, 78], left: [80, 95] },   // 3: right-lower
+    { top: [58, 78], left: [3, 18] },    // 4: left-lower
+    { top: [20, 55], left: [3, 16] },    // 5: left-upper
+  ];
+  let lastZone = 2; // start from right side (matches CSS initial left: 88%)
+  let currentSpeed = 0; // track travel speed for sparkle/glow intensity
+
+  function randomPos() {
+    // Pick an adjacent zone (±1 or ±2 steps) to avoid crossing center
+    const step = Math.random() < 0.6
+      ? (Math.random() < 0.5 ? 1 : -1)   // 60%: move 1 step
+      : (Math.random() < 0.5 ? 2 : -2);  // 40%: move 2 steps
+    lastZone = (lastZone + step + zones.length) % zones.length;
+    const zone = zones[lastZone];
+    return {
+      top: zone.top[0] + Math.random() * (zone.top[1] - zone.top[0]),
+      left: zone.left[0] + Math.random() * (zone.left[1] - zone.left[0]),
+    };
+  }
+
+  const glowEl = wanderingStar.querySelector(".wandering-star-glow") as HTMLElement;
+
+  // Move to a random spot, rest, repeat
+  function wanderStep() {
+    if (wanderingStar.classList.contains("open")) {
+      setTimeout(wanderStep, 500);
+      return;
+    }
+
+    const pos = randomPos();
+    const speed = 2.5 + Math.random() * 3; // 2.5–5.5s travel time
+    const rest = 2 + Math.random() * 3; // 2–5s rest at destination
+
+    // Speed intensity: shorter duration = faster movement = higher value (0–1)
+    currentSpeed = 1 - (speed - 2.5) / 3; // 1.0 at fastest (2.5s), 0.0 at slowest (5.5s)
+
+    isMoving = true;
+
+    // Scale glow size with speed — faster = bigger glow
+    const glowSize = 60 + currentSpeed * 60; // 60px at rest → 120px at max speed
+    gsap.to(glowEl, {
+      width: glowSize,
+      height: glowSize,
+      opacity: 0.5 + currentSpeed * 0.5,
+      duration: 0.6,
+      ease: "power2.out",
+    });
+
+    gsap.to(wanderingStar, {
+      top: `${pos.top}%`,
+      left: `${pos.left}%`,
+      duration: speed,
+      ease: "sine.inOut",
+      onComplete: () => {
+        isMoving = false;
+        currentSpeed = 0;
+
+        // Shrink glow back to resting size
+        gsap.to(glowEl, {
+          width: 60,
+          height: 60,
+          opacity: 0.5,
+          duration: 1,
+          ease: "power2.out",
+        });
+
+        setTimeout(wanderStep, rest * 1000);
+      },
+    });
+  }
+
+  // Start after initial appear delay
+  setTimeout(wanderStep, 2000);
+
+  // Spawn sparkle particles — size & spread scale with movement speed
+  function spawnSparkle() {
+    if (wanderingStar.classList.contains("open")) return;
+
+    const rect = wanderingStar.getBoundingClientRect();
+    const heroRect = hero.getBoundingClientRect();
+
+    const sparkle = document.createElement("div");
+    sparkle.className = "sparkle-particle";
+    const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+
+    // Scale size with speed: 2-4px at rest → up to 3-9px at max speed
+    const size = 2 + currentSpeed * 3 + Math.random() * (2 + currentSpeed * 3);
+    const spread = 8 + currentSpeed * 12; // spawn spread around star center
+    const x = rect.left - heroRect.left + rect.width / 2 + (Math.random() - 0.5) * spread;
+    const y = rect.top - heroRect.top + rect.height / 2 + (Math.random() - 0.5) * spread;
+
+    const glowRadius = size * (2 + currentSpeed * 2);
+    sparkle.style.cssText = `
+      left: ${x}px; top: ${y}px;
+      width: ${size}px; height: ${size}px;
+      background: ${color};
+      box-shadow: 0 0 ${glowRadius}px ${color};
+    `;
+    hero.appendChild(sparkle);
+
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 20 + Math.random() * 30 + currentSpeed * 20; // faster = fling farther
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+
+    gsap.to(sparkle, {
+      x: dx,
+      y: dy,
+      opacity: 0,
+      scale: 0,
+      duration: 0.5 + Math.random() * 0.6 + currentSpeed * 0.3,
+      ease: "power2.out",
+      onComplete: () => sparkle.remove(),
+    });
+  }
+
+  // Sparkle rate: scales with speed — faster movement = more frequent sparkles
+  function sparkleLoop() {
+    spawnSparkle();
+    // At max speed (1.0): ~60ms delay. At rest (0.0): ~450ms delay.
+    const delay = isMoving
+      ? 60 + (1 - currentSpeed) * 200 + Math.random() * 60
+      : 400 + Math.random() * 150;
+    setTimeout(sparkleLoop, delay);
+  }
+  setTimeout(sparkleLoop, 1500);
+
+  // Click to show popup, pause wandering
+  const popup = document.getElementById("wandering-star-popup")!;
+
+  wanderingStar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpening = !wanderingStar.classList.contains("open");
+    wanderingStar.classList.toggle("open");
+
+    if (isOpening) {
+      // Kill active movement so star stays put
+      gsap.killTweensOf(wanderingStar);
+      gsap.killTweensOf(glowEl);
+      isMoving = false;
+      currentSpeed = 0;
+
+      // Reset glow to resting state
+      gsap.to(glowEl, { width: 60, height: 60, opacity: 0.5, duration: 0.4 });
+
+      // Flip popup below star if near the top of the hero
+      const starRect = wanderingStar.getBoundingClientRect();
+      const heroRect = hero.getBoundingClientRect();
+      const spaceAbove = starRect.top - heroRect.top;
+
+      if (spaceAbove < 140) {
+        popup.style.bottom = "auto";
+        popup.style.top = "calc(100% + 16px)";
+        popup.classList.add("flipped");
+      } else {
+        popup.style.bottom = "calc(100% + 16px)";
+        popup.style.top = "auto";
+        popup.classList.remove("flipped");
+      }
+    } else {
+      // Resume wandering after closing
+      setTimeout(wanderStep, 1000);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!wanderingStar.contains(e.target as Node) && wanderingStar.classList.contains("open")) {
+      wanderingStar.classList.remove("open");
+      setTimeout(wanderStep, 1000);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && wanderingStar.classList.contains("open")) {
+      wanderingStar.classList.remove("open");
+      setTimeout(wanderStep, 1000);
+    }
+  });
+}
+
 // --- Init ---
 render();
