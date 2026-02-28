@@ -431,5 +431,126 @@ if (wanderingStar && hero) {
   });
 }
 
+// --- Rainbow & Unicorn click effect (fountain style) ---
+(() => {
+  const unicorns = ["🦄", "🌈", "✨", "💖", "⭐", "🌟", "💫"];
+  const rainbowColors = [
+    "#ff0000", "#ff4500", "#ff8c00", "#ffd700",
+    "#32cd32", "#00bfff", "#8a2be2", "#ff69b4",
+  ];
+
+  const MAX_PARTICLES = 60;
+  let activeParticles = 0;
+  let holdTimer: ReturnType<typeof setInterval> | null = null;
+  let isHolding = false;
+  let holdX = 0;
+  let holdY = 0;
+
+  // Fountain: particles arc upward then fall — single tween with physics-like cubic bezier
+  function spawnFountain(x: number, y: number, count: number) {
+    const toSpawn = Math.min(count, MAX_PARTICLES - activeParticles);
+    if (toSpawn <= 0) return;
+
+    for (let i = 0; i < toSpawn; i++) {
+      activeParticles++;
+      const el = document.createElement("div");
+      const useEmoji = Math.random() < 0.4;
+
+      if (useEmoji) {
+        const emoji = unicorns[Math.floor(Math.random() * unicorns.length)];
+        el.className = "click-particle click-particle-emoji";
+        el.textContent = emoji;
+        el.style.fontSize = `${14 + Math.random() * 14}px`;
+      } else {
+        el.className = "click-particle click-particle-dot";
+        const color = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
+        const size = 4 + Math.random() * 7;
+        el.style.width = `${size}px`;
+        el.style.height = `${size}px`;
+        el.style.background = color;
+        el.style.boxShadow = `0 0 ${size}px ${color}`;
+      }
+
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      document.body.appendChild(el);
+
+      const dx = (Math.random() - 0.5) * 260;        // wide horizontal spread
+      const peakY = -(40 + Math.random() * 60);      // low arc: 40-100px up
+      const rotation = (Math.random() - 0.5) * 300;
+      const dur = 0.8 + Math.random() * 0.5;
+
+      // Horizontal: linear drift
+      gsap.to(el, { x: dx, duration: dur, ease: "none" });
+
+      // Rotation: linear spin
+      gsap.to(el, { rotation, duration: dur, ease: "none" });
+
+      // Vertical: single tween — up then down using a bezier-like custom ease
+      // cubic-bezier(0.2, 0.8, 0.6, -0.2) gives a natural throw arc
+      gsap.to(el, {
+        keyframes: [
+          { y: peakY, duration: dur * 0.35, ease: "power2.out" },
+          { y: 60 + Math.random() * 60, duration: dur * 0.65, ease: "power2.in" },
+        ],
+      });
+
+      // Fade: stay visible most of the flight, fade at the end
+      gsap.to(el, {
+        opacity: 0,
+        scale: 0.4,
+        duration: dur * 0.4,
+        delay: dur * 0.6,
+        ease: "power1.in",
+        onComplete: () => {
+          el.remove();
+          activeParticles--;
+        },
+      });
+    }
+  }
+
+  document.addEventListener("mousedown", (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("a, button, input, .wandering-star, .filter-tab, .icon-btn")) return;
+
+    holdX = e.clientX;
+    holdY = e.clientY;
+    isHolding = true;
+
+    // Initial burst — a fountain spray
+    spawnFountain(holdX, holdY, 8);
+
+    // Hold: continuous fountain stream
+    holdTimer = setInterval(() => {
+      if (!isHolding) return;
+      spawnFountain(holdX, holdY, 2);
+    }, 100);
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (isHolding) {
+      holdX = e.clientX;
+      holdY = e.clientY;
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    isHolding = false;
+    if (holdTimer) {
+      clearInterval(holdTimer);
+      holdTimer = null;
+    }
+  });
+
+  document.addEventListener("mouseleave", () => {
+    isHolding = false;
+    if (holdTimer) {
+      clearInterval(holdTimer);
+      holdTimer = null;
+    }
+  });
+})();
+
 // --- Init ---
 render();

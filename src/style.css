@@ -400,6 +400,23 @@ a {
   z-index: 2;
 }
 
+/* Rainbow & Unicorn click particles */
+.click-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform, opacity;
+}
+
+.click-particle-dot {
+  border-radius: 50%;
+}
+
+.click-particle-emoji {
+  line-height: 1;
+  user-select: none;
+}
+
 /* Star popup */
 .wandering-star-popup {
   position: absolute;
