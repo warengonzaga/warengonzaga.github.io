@@ -6,6 +6,8 @@ export interface Project {
   repo: string;
   category: Category;
   language?: string;
+  emoji: string;
+  isNew?: boolean;
 }
 
 export const categoryMeta: Record<Category | "all", { label: string; color: string }> = {
@@ -31,6 +33,15 @@ export const langColors: Record<string, string> = {
   Rust: "#dea584",
 };
 
+// ── Tiny Claw (Highlight Project) ──
+export const tinyClaw = {
+  name: "Tiny Claw",
+  description: "Ultra-minimal AI companion that learns",
+  repo: "warengonzaga/tinyclaw",
+  language: "TypeScript",
+  emoji: "🤖🧠🐜",
+};
+
 export const projects: Project[] = [
   // ── Featured (Current Projects) ──
   {
@@ -39,6 +50,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/magic-commit",
     category: "featured",
     language: "TypeScript",
+    emoji: "🪄📝🤖",
   },
   {
     name: "Magic Release",
@@ -46,13 +58,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/magic-release",
     category: "featured",
     language: "TypeScript",
-  },
-  {
-    name: "TinyClaw",
-    description: "Ultra-minimal AI companion that learns",
-    repo: "warengonzaga/tinyclaw",
-    category: "featured",
-    language: "TypeScript",
+    emoji: "🪄🚀🤖",
   },
 
   // ── Labs (WG Tech Labs) ──
@@ -62,6 +68,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/github-copilot-chatmodes",
     category: "labs",
     language: "Markdown",
+    emoji: "🤖💬🧩",
   },
   {
     name: "Clean Commit",
@@ -69,6 +76,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/clean-commit",
     category: "labs",
     language: "TypeScript",
+    emoji: "🧹📝✅",
   },
   {
     name: "Forum Support Discord Bot",
@@ -76,6 +84,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/forum-support-discord-bot",
     category: "labs",
     language: "TypeScript",
+    emoji: "💬🤝🎮",
   },
   {
     name: "Unthread Discord Bot",
@@ -83,6 +92,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/unthread-discord-bot",
     category: "labs",
     language: "TypeScript",
+    emoji: "🎫🤖🎮",
   },
   {
     name: "Log Engine",
@@ -90,6 +100,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/log-engine",
     category: "labs",
     language: "TypeScript",
+    emoji: "📋🔍🛠️",
   },
   {
     name: "Secrets Engine",
@@ -97,6 +108,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/secrets-engine",
     category: "labs",
     language: "TypeScript",
+    emoji: "🔐🗝️🛡️",
   },
   {
     name: "Config Engine",
@@ -104,6 +116,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/config-engine",
     category: "labs",
     language: "TypeScript",
+    emoji: "⚙️📦🔧",
   },
   {
     name: "Unthread Telegram Bot",
@@ -111,6 +124,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/unthread-telegram-bot",
     category: "labs",
     language: "TypeScript",
+    emoji: "🎫🤖✈️",
   },
   {
     name: "Unthread WhatsApp Bot",
@@ -118,6 +132,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/unthread-whatsapp-bot",
     category: "labs",
     language: "TypeScript",
+    emoji: "🎫🤖💬",
   },
   {
     name: "Container Build Flow",
@@ -125,6 +140,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/container-build-flow-action",
     category: "labs",
     language: "YAML",
+    emoji: "🐳🔄📦",
   },
   {
     name: "Package Build Flow",
@@ -132,6 +148,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/package-build-flow-action",
     category: "labs",
     language: "YAML",
+    emoji: "📦🔄🚀",
   },
   {
     name: "Release Build Flow",
@@ -139,6 +156,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/release-build-flow-action",
     category: "labs",
     language: "YAML",
+    emoji: "🏷️🔄🚀",
   },
   {
     name: "Unthread Webhook Server",
@@ -146,6 +164,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/unthread-webhook-server",
     category: "labs",
     language: "TypeScript",
+    emoji: "🪝🖥️🔗",
   },
   {
     name: "Nuvex",
@@ -153,6 +172,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/nuvex",
     category: "labs",
     language: "TypeScript",
+    emoji: "🧠💾🤖",
   },
   {
     name: "Unthread Webhook SDK",
@@ -160,6 +180,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/unthread-webhook-sdk",
     category: "labs",
     language: "TypeScript",
+    emoji: "🪝📦🔗",
   },
   {
     name: "Is Railway",
@@ -167,6 +188,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/is-railway",
     category: "labs",
     language: "TypeScript",
+    emoji: "🚂🔍☁️",
   },
   {
     name: "OSV Framework",
@@ -174,6 +196,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/osv-framework",
     category: "labs",
     language: "Markdown",
+    emoji: "💰📐🤝",
   },
   {
     name: "Zentrynel",
@@ -181,22 +204,7 @@ export const projects: Project[] = [
     repo: "wgtechlabs/zentrynel",
     category: "labs",
     language: "TypeScript",
-  },
-
-  // ── Community ──
-  {
-    name: "COVID-19 Tracker CLI",
-    description: "COVID-19 statistics tracker for the terminal",
-    repo: "OSSPhilippines/covid19-tracker-cli",
-    category: "community",
-    language: "JavaScript",
-  },
-  {
-    name: "Matuto",
-    description: "Web3 educational browser extension",
-    repo: "Web3Philippines/matuto",
-    category: "community",
-    language: "TypeScript",
+    emoji: "🛡️🤖🎮",
   },
 
   // ── Projects (Open Source) ──
@@ -206,6 +214,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/css-text-portrait-builder",
     category: "projects",
     language: "CSS",
+    emoji: "🎨🖼️✨",
   },
   {
     name: "GitHub Repo Banner",
@@ -213,6 +222,8 @@ export const projects: Project[] = [
     repo: "warengonzaga/github-repo-banner",
     category: "projects",
     language: "HTML",
+    emoji: "🏷️🖼️🐙",
+    isNew: true,
   },
   {
     name: "WiFi Passview",
@@ -220,6 +231,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/wifi-passview",
     category: "projects",
     language: "Batch",
+    emoji: "📶🔑👀",
   },
   {
     name: "WRN Cleaner",
@@ -227,6 +239,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/wrn-cleaner",
     category: "projects",
     language: "Batch",
+    emoji: "🧹💻🗑️",
   },
   {
     name: "Buy Me a Coffee.js",
@@ -234,20 +247,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/buymeacoffee.js",
     category: "projects",
     language: "JavaScript",
-  },
-  {
-    name: "Gather Town.js",
-    description: "Gather Town JavaScript SDK",
-    repo: "warengonzaga/gathertown.js",
-    category: "projects",
-    language: "JavaScript",
-  },
-  {
-    name: "Daisy.js",
-    description: "Web animation plugin for particle systems",
-    repo: "warengonzaga/daisy.js",
-    category: "projects",
-    language: "JavaScript",
+    emoji: "☕💛📦",
   },
   {
     name: "Fork Corner",
@@ -255,6 +255,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/fork-corner",
     category: "projects",
     language: "JavaScript",
+    emoji: "🍴📌🌐",
   },
   {
     name: "Love Cards",
@@ -262,13 +263,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/love-cards",
     category: "projects",
     language: "HTML",
-  },
-  {
-    name: "thirdweb WP",
-    description: "thirdweb WordPress plugin",
-    repo: "warengonzaga/thirdweb-wp",
-    category: "projects",
-    language: "PHP",
+    emoji: "💌❤️✨",
   },
   {
     name: "IPFS Support Extension",
@@ -276,6 +271,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/ipfs-support-extension",
     category: "projects",
     language: "JavaScript",
+    emoji: "🌐📦🔌",
   },
   {
     name: "Arweave Support Extension",
@@ -283,6 +279,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/arweave-support-extension",
     category: "projects",
     language: "JavaScript",
+    emoji: "🌐💎🔌",
   },
   {
     name: "Is It Relay",
@@ -290,6 +287,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/is-it-relay",
     category: "projects",
     language: "TypeScript",
+    emoji: "🔍🔗⚡",
   },
   {
     name: "Relay Protocol Indexer App",
@@ -297,6 +295,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/relay-protocol-indexer-app",
     category: "projects",
     language: "TypeScript",
+    emoji: "📊🔗🗄️",
   },
   {
     name: "Relay Protocol Stats",
@@ -304,6 +303,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/relay-protocol-stats",
     category: "projects",
     language: "TypeScript",
+    emoji: "📈🔗📊",
   },
   {
     name: "PCSO 2D Lotto Generator",
@@ -311,6 +311,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/pcso-2d-lotto-generator",
     category: "projects",
     language: "JavaScript",
+    emoji: "🎲🔢🍀",
   },
   {
     name: "ExpandURL CLI",
@@ -318,6 +319,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/expandurl-cli",
     category: "projects",
     language: "TypeScript",
+    emoji: "🔗🔍💻",
   },
   {
     name: "GitHub Labels Template",
@@ -325,6 +327,8 @@ export const projects: Project[] = [
     repo: "warengonzaga/github-labels-template",
     category: "projects",
     language: "JavaScript",
+    emoji: "🏷️🎨🐙",
+    isNew: true,
   },
   {
     name: "Gumroad TS",
@@ -332,6 +336,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/gumroad-ts",
     category: "projects",
     language: "TypeScript",
+    emoji: "🛒💰📦",
   },
   {
     name: "Contribute Now",
@@ -339,6 +344,8 @@ export const projects: Project[] = [
     repo: "warengonzaga/contribute-now",
     category: "projects",
     language: "JavaScript",
+    emoji: "🤝🔄💻",
+    isNew: true,
   },
 
   // ── Legacy ──
@@ -348,5 +355,46 @@ export const projects: Project[] = [
     repo: "animate-css/animate.css",
     category: "legacy",
     language: "CSS",
+    emoji: "✨🎭🎬",
+  },
+  {
+    name: "COVID-19 Tracker CLI",
+    description: "COVID-19 statistics tracker for the terminal",
+    repo: "OSSPhilippines/covid19-tracker-cli",
+    category: "legacy",
+    language: "JavaScript",
+    emoji: "🦠📊💻",
+  },
+  {
+    name: "Matuto",
+    description: "Web3 educational browser extension",
+    repo: "Web3Philippines/matuto",
+    category: "legacy",
+    language: "TypeScript",
+    emoji: "📚🌐🧩",
+  },
+  {
+    name: "Gather Town.js",
+    description: "Gather Town JavaScript SDK",
+    repo: "warengonzaga/gathertown.js",
+    category: "legacy",
+    language: "JavaScript",
+    emoji: "🏘️👥📦",
+  },
+  {
+    name: "Daisy.js",
+    description: "Web animation plugin for particle systems",
+    repo: "warengonzaga/daisy.js",
+    category: "legacy",
+    language: "JavaScript",
+    emoji: "🌸✨🎆",
+  },
+  {
+    name: "thirdweb WP",
+    description: "thirdweb WordPress plugin",
+    repo: "warengonzaga/thirdweb-wp",
+    category: "legacy",
+    language: "PHP",
+    emoji: "🌐🔌📰",
   },
 ];

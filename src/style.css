@@ -19,11 +19,11 @@
   --text: #e4e4ef;
   --text-muted: #8888a0;
   --text-dim: #5c5c72;
-  --accent: #6c5ce7;
-  --accent-glow: rgba(108, 92, 231, 0.3);
-  --accent-2: #00cec9;
-  --gradient-1: linear-gradient(135deg, #6c5ce7, #a29bfe);
-  --gradient-hero: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108, 92, 231, 0.15), transparent);
+  --accent: #013B84;
+  --accent-glow: rgba(1, 59, 132, 0.3);
+  --accent-2: #016EEA;
+  --gradient-1: linear-gradient(135deg, #013B84, #016EEA);
+  --gradient-hero: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(1, 59, 132, 0.15), transparent);
   --radius: 12px;
   --radius-lg: 16px;
   --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -75,31 +75,99 @@ a {
   inset: 0;
   background: var(--gradient-hero);
   z-index: 0;
+  overflow: hidden;
+  filter: blur(60px);
 }
 
 .hero-bg::before {
   content: "";
   position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(108, 92, 231, 0.08), transparent 70%);
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(1, 59, 132, 0.6), rgba(1, 59, 132, 0.15) 50%, transparent 70%);
   border-radius: 50%;
-  animation: pulse-glow 6s ease-in-out infinite;
+  top: -10%;
+  left: 10%;
+  animation: lava-1 18s ease-in-out infinite;
 }
 
 .hero-bg::after {
   content: "";
   position: absolute;
-  top: 30%;
-  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(1, 110, 234, 0.5), rgba(1, 110, 234, 0.1) 50%, transparent 70%);
+  border-radius: 50%;
+  bottom: -10%;
+  right: 5%;
+  animation: lava-2 22s ease-in-out infinite;
+}
+
+.lava-blob {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.lava-blob-1 {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(0, 206, 201, 0.05), transparent 70%);
-  border-radius: 50%;
-  animation: pulse-glow 8s ease-in-out 2s infinite;
+  background: radial-gradient(circle, rgba(1, 80, 180, 0.45), transparent 70%);
+  top: 40%;
+  left: 50%;
+  animation: lava-3 15s ease-in-out infinite;
+}
+
+.lava-blob-2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(1, 110, 234, 0.35), transparent 70%);
+  top: 5%;
+  right: 15%;
+  animation: lava-4 20s ease-in-out infinite;
+}
+
+.lava-blob-3 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(1, 59, 132, 0.4), transparent 70%);
+  bottom: 5%;
+  left: 25%;
+  animation: lava-5 25s ease-in-out infinite;
+}
+
+@keyframes lava-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(80px, 60px) scale(1.15); }
+  50% { transform: translate(-40px, 120px) scale(0.9); }
+  75% { transform: translate(60px, -30px) scale(1.1); }
+}
+
+@keyframes lava-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-70px, -50px) scale(1.1); }
+  50% { transform: translate(50px, -90px) scale(0.85); }
+  75% { transform: translate(-30px, 40px) scale(1.2); }
+}
+
+@keyframes lava-3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  33% { transform: translate(-30%, -70%) scale(1.2); }
+  66% { transform: translate(-70%, -30%) scale(0.8); }
+}
+
+@keyframes lava-4 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  25% { transform: translate(-60px, 80px) scale(1.15); opacity: 1; }
+  50% { transform: translate(40px, 40px) scale(0.9); opacity: 0.6; }
+  75% { transform: translate(-20px, -60px) scale(1.05); opacity: 1; }
+}
+
+@keyframes lava-5 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  20% { transform: translate(50px, -40px) scale(1.1); opacity: 1; }
+  40% { transform: translate(-60px, -80px) scale(0.85); opacity: 0.8; }
+  60% { transform: translate(30px, 50px) scale(1.15); opacity: 0.9; }
+  80% { transform: translate(-40px, 20px) scale(0.95); opacity: 1; }
 }
 
 @keyframes pulse-glow {
@@ -112,14 +180,90 @@ a {
   z-index: 1;
   text-align: center;
   max-width: 720px;
+  overflow: visible;
+}
+
+/* Avatar */
+.hero-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 28px;
+  animation: fade-in-up 0.6s ease-out both;
+}
+
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(1, 110, 234, 0.4);
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.hero-avatar:hover .avatar-img {
+  transform: scale(1.05);
+  border-color: var(--accent-2);
+}
+
+.avatar-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(1, 110, 234, 0.3) 0%, transparent 70%);
+  animation: avatar-pulse 3s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes avatar-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.avatar-bubble {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: #fff;
+  color: #0a0a0f;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 10px 16px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+}
+
+.avatar-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: #fff;
+}
+
+.hero-avatar:hover .avatar-bubble {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 .hero-title {
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1.3;
   margin-bottom: 24px;
   animation: fade-in-up 0.6s ease-out 0.1s both;
+  overflow: visible;
 }
 
 .hero-name {
@@ -128,6 +272,22 @@ a {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  cursor: default;
+  overflow: visible;
+  padding: 0 10px;
+}
+
+.name-letter {
+  display: inline-block;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  will-change: transform;
+}
+
+.name-space {
+  display: inline-block;
 }
 
 .hero-tagline {
@@ -164,9 +324,16 @@ a {
 }
 
 .stat {
+  display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--gradient-1);
+  padding: 8px 20px;
+  border-radius: 100px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 20px rgba(1, 110, 234, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .hero-links {
@@ -238,6 +405,110 @@ a {
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   Tiny Claw Highlight
+   ============================================ */
+
+.tinyclaw-section {
+  position: relative;
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.tinyclaw-highlight {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid rgba(1, 59, 132, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px;
+  text-align: center;
+  animation: fade-in-up 0.6s ease-out 0.5s both;
+}
+
+.tinyclaw-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(1, 59, 132, 0.2), rgba(1, 110, 234, 0.1));
+  z-index: -1;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+.tinyclaw-highlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-1);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.tinyclaw-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.tinyclaw-emoji {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.tinyclaw-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-2);
+}
+
+.tinyclaw-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 900;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.tinyclaw-desc {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.tinyclaw-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+}
+
+.tinyclaw-lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.tinyclaw-cta {
+  margin-top: 8px;
 }
 
 /* ============================================
@@ -391,7 +662,7 @@ a {
 }
 
 .project-card.featured {
-  border-color: rgba(108, 92, 231, 0.2);
+  border-color: rgba(1, 59, 132, 0.2);
 }
 
 .project-card.featured::before {
@@ -403,6 +674,12 @@ a {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.card-emoji {
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: 0.1em;
 }
 
 .card-header {
@@ -418,6 +695,27 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--badge-color);
+}
+
+.new-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: var(--accent-2);
+  padding: 3px 10px;
+  border-radius: 100px;
+  z-index: 2;
+  animation: new-pulse 2s ease-in-out infinite;
+}
+
+@keyframes new-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 .card-title {
@@ -549,6 +847,18 @@ a {
   .hero-links {
     flex-direction: column;
     align-items: center;
+  }
+
+  .tinyclaw-section {
+    padding: 60px 0;
+  }
+
+  .tinyclaw-highlight {
+    padding: 36px 24px;
+  }
+
+  .tinyclaw-emoji {
+    font-size: 2rem;
   }
 }
 
