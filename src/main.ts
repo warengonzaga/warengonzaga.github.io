@@ -248,15 +248,23 @@ if (_wanderingStar && hero) {
 
   // Safe zones around the edges, avoiding center content and scroll indicator.
   // Ordered clockwise so adjacent zones share edges (no crossing the center).
-  const zones = [
-    { top: [5, 15],  left: [5, 40] },    // 0: top-left
-    { top: [5, 15],  left: [60, 95] },   // 1: top-right
-    { top: [20, 55], left: [82, 95] },   // 2: right-upper
-    { top: [58, 78], left: [80, 95] },   // 3: right-lower
-    { top: [58, 78], left: [3, 18] },    // 4: left-lower
-    { top: [20, 55], left: [3, 16] },    // 5: left-upper
-  ];
-  let lastZone = 2; // start from right side (matches CSS initial left: 88%)
+  const isMobile = window.innerWidth <= 768;
+  const zones = isMobile
+    ? [
+        { top: [3, 10],  left: [5, 35] },    // 0: top-left
+        { top: [3, 10],  left: [65, 92] },   // 1: top-right
+        { top: [75, 88], left: [65, 92] },   // 2: bottom-right
+        { top: [75, 88], left: [5, 35] },    // 3: bottom-left
+      ]
+    : [
+        { top: [5, 15],  left: [5, 40] },    // 0: top-left
+        { top: [5, 15],  left: [60, 95] },   // 1: top-right
+        { top: [20, 55], left: [82, 95] },   // 2: right-upper
+        { top: [58, 78], left: [80, 95] },   // 3: right-lower
+        { top: [58, 78], left: [3, 18] },    // 4: left-lower
+        { top: [20, 55], left: [3, 16] },    // 5: left-upper
+      ];
+  let lastZone = isMobile ? 1 : 2; // start from right side
   let currentSpeed = 0; // track travel speed for sparkle/glow intensity
 
   function randomPos() {
@@ -511,46 +519,59 @@ if (_wanderingStar && hero) {
     }
   }
 
-  document.addEventListener("mousedown", (e) => {
-    const target = e.target as HTMLElement;
-    if (target.closest("a, button, input, .wandering-star, .filter-tab, .icon-btn")) return;
+  function isInteractive(target: HTMLElement) {
+    return !!target.closest("a, button, input, .wandering-star, .filter-tab, .icon-btn");
+  }
 
-    holdX = e.clientX;
-    holdY = e.clientY;
+  function startHold(x: number, y: number) {
+    holdX = x;
+    holdY = y;
     isHolding = true;
-
-    // Initial burst — a fountain spray
     spawnFountain(holdX, holdY, 8);
-
-    // Hold: continuous fountain stream
     holdTimer = setInterval(() => {
       if (!isHolding) return;
       spawnFountain(holdX, holdY, 2);
     }, 100);
+  }
+
+  function stopHold() {
+    isHolding = false;
+    if (holdTimer) {
+      clearInterval(holdTimer);
+      holdTimer = null;
+    }
+  }
+
+  // Mouse events
+  document.addEventListener("mousedown", (e) => {
+    if (isInteractive(e.target as HTMLElement)) return;
+    startHold(e.clientX, e.clientY);
   });
 
   document.addEventListener("mousemove", (e) => {
+    if (isHolding) { holdX = e.clientX; holdY = e.clientY; }
+  });
+
+  document.addEventListener("mouseup", stopHold);
+  document.addEventListener("mouseleave", stopHold);
+
+  // Touch events
+  document.addEventListener("touchstart", (e) => {
+    if (isInteractive(e.target as HTMLElement)) return;
+    const t = e.touches[0];
+    startHold(t.clientX, t.clientY);
+  }, { passive: true });
+
+  document.addEventListener("touchmove", (e) => {
     if (isHolding) {
-      holdX = e.clientX;
-      holdY = e.clientY;
+      const t = e.touches[0];
+      holdX = t.clientX;
+      holdY = t.clientY;
     }
-  });
+  }, { passive: true });
 
-  document.addEventListener("mouseup", () => {
-    isHolding = false;
-    if (holdTimer) {
-      clearInterval(holdTimer);
-      holdTimer = null;
-    }
-  });
-
-  document.addEventListener("mouseleave", () => {
-    isHolding = false;
-    if (holdTimer) {
-      clearInterval(holdTimer);
-      holdTimer = null;
-    }
-  });
+  document.addEventListener("touchend", stopHold);
+  document.addEventListener("touchcancel", stopHold);
 })();
 
 // --- Init ---

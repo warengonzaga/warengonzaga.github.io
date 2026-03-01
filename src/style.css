@@ -1464,7 +1464,32 @@ a {
   }
 
   .wandering-star {
-    display: none;
+    top: 8%;
+    left: 75%;
+  }
+
+  .wandering-star-emoji {
+    font-size: 1.3rem;
+  }
+
+  .wandering-star-popup {
+    white-space: normal;
+    width: max(200px, 70vw);
+    max-width: 300px;
+    left: auto;
+    right: 0;
+    transform: scale(0.8);
+    transform-origin: top right;
+  }
+
+  .wandering-star.open .wandering-star-popup {
+    transform: scale(1);
+  }
+
+  .wandering-star-popup::after {
+    left: auto;
+    right: 20px;
+    transform: none;
   }
 
   .now-building-section {
