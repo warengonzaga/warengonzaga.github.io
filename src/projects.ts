@@ -79,6 +79,7 @@ export const projects: Project[] = [
     category: "featured",
     language: "TypeScript",
     emoji: "🤝🔄💻",
+    isNew: true,
   },
 
   // ── Labs (WG Tech Labs) ──
@@ -266,7 +267,7 @@ export const projects: Project[] = [
   },
   {
     name: "Buy Me a Coffee.js",
-    description: "Buy Me a Coffee JavaScript SDK",
+    description: "Buy Me a Coffee TypeScript SDK",
     repo: "warengonzaga/buymeacoffee.js",
     website: "https://buymeacoffee.js.org",
     category: "projects",
