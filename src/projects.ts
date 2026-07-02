@@ -47,6 +47,22 @@ export const tinyClaw = {
 export const projects: Project[] = [
   // ── Featured (Current Projects) ──
   {
+    name: "Devin Discord Bot",
+    description: "Deploy Devin AI software engineer into Discord",
+    repo: "wgtechlabs/devin-discord-bot",
+    category: "featured",
+    emoji: "💬🤖💻",
+    isNew: true,
+  },
+  {
+    name: "Devin Telegram Bot",
+    description: "Self-hosted Telegram bot integration for Devin AI",
+    repo: "wgtechlabs/devin-telegram-bot",
+    category: "featured",
+    emoji: "📱🤖💻",
+    isNew: true,
+  },
+  {
     name: "Magic Commit",
     description: "AI-powered Git commit message generator",
     repo: "warengonzaga/magic-commit",
@@ -98,6 +114,24 @@ export const projects: Project[] = [
     category: "labs",
     language: "TypeScript",
     emoji: "🧹📝✅",
+  },
+  {
+    name: "Build Flow Action",
+    description: "One workflow for CI, security, packaging, and releases",
+    repo: "wgtechlabs/build-flow-action",
+    category: "labs",
+    language: "YAML",
+    emoji: "🔄⚙️🚀",
+    isNew: true,
+  },
+  {
+    name: "Clean Flow",
+    description: "Ship through dev, keep main clean",
+    repo: "wgtechlabs/clean-flow",
+    category: "labs",
+    language: "Markdown",
+    emoji: "🧹🌊✅",
+    isNew: true,
   },
   {
     name: "Forum Support Discord Bot",
@@ -246,6 +280,14 @@ export const projects: Project[] = [
     category: "projects",
     language: "HTML",
     emoji: "🏷️🖼️🐙",
+    isNew: true,
+  },
+  {
+    name: "GitHub Repo OpenGraph",
+    description: "Customizable Open Graph images for GitHub repositories",
+    repo: "warengonzaga/github-repo-opengraph",
+    category: "projects",
+    emoji: "🌄🖼️🐙",
     isNew: true,
   },
   {
