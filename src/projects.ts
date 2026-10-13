@@ -1,4 +1,5 @@
 export type Category = "featured" | "labs" | "community" | "projects" | "legacy";
+export type ProjectStatus = "planned" | "spec";
 
 export interface Project {
   name: string;
@@ -9,15 +10,22 @@ export interface Project {
   emoji: string;
   isNew?: boolean;
   website?: string;
+  focus?: string;
+  status?: ProjectStatus;
 }
 
 export const categoryMeta: Record<Category | "all", { label: string; color: string }> = {
   all: { label: "All", color: "#e4e4ef" },
-  featured: { label: "Featured", color: "#06b6d4" },
-  labs: { label: "Labs", color: "#8b5cf6" },
-  community: { label: "Community", color: "#22c55e" },
-  projects: { label: "Projects", color: "#f59e0b" },
-  legacy: { label: "Legacy", color: "#71717a" },
+  featured: { label: "Current", color: "#7ec8ff" },
+  labs: { label: "Side", color: "#c4b5fd" },
+  community: { label: "Community", color: "#86efac" },
+  projects: { label: "Other", color: "#fcd34d" },
+  legacy: { label: "Legacy", color: "#e7d7c3" },
+};
+
+export const statusLabel: Record<ProjectStatus, string> = {
+  planned: "Planned",
+  spec: "Specification",
 };
 
 export const langColors: Record<string, string> = {
@@ -34,23 +42,14 @@ export const langColors: Record<string, string> = {
   Rust: "#dea584",
 };
 
-// ── Tiny Claw (Highlight Project) ──
-export const tinyClaw = {
-  name: "Tiny Claw",
-  description: "Ultra-minimal AI companion that learns",
-  repo: "warengonzaga/tinyclaw",
-  website: "https://tinyclaw.ai",
-  language: "TypeScript",
-  emoji: "🤖🧠🐜",
-};
-
 export const projects: Project[] = [
-  // ── Featured (Current Projects) ──
+  // Current — profile README order. Rove is the spotlight above the grid.
   {
     name: "Devin Discord Bot",
-    description: "Deploy Devin AI software engineer into Discord",
+    description: "Deploy Devin, your friendly AI software engineer, directly into Discord",
     repo: "wgtechlabs/devin-discord-bot",
     category: "featured",
+    focus: "AI/Bot",
     emoji: "💬🤖💻",
     isNew: true,
   },
@@ -59,6 +58,7 @@ export const projects: Project[] = [
     description: "Self-hosted Telegram bot integration for Devin AI",
     repo: "wgtechlabs/devin-telegram-bot",
     category: "featured",
+    focus: "AI/Bot",
     emoji: "📱🤖💻",
     isNew: true,
   },
@@ -68,6 +68,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/magic-commit",
     category: "featured",
     language: "TypeScript",
+    focus: "AI/CLI",
     emoji: "🪄📝🤖",
   },
   {
@@ -77,7 +78,18 @@ export const projects: Project[] = [
     website: "https://warengonzaga.com/magic-release",
     category: "featured",
     language: "TypeScript",
+    focus: "AI/CLI",
     emoji: "🪄🚀🤖",
+  },
+  {
+    name: "Tiny Claw",
+    description: "Ultra-minimal AI companion that learns",
+    repo: "warengonzaga/tinyclaw",
+    website: "https://tinyclaw.ai",
+    category: "featured",
+    language: "TypeScript",
+    focus: "AI",
+    emoji: "🤖🧠🐜",
   },
   {
     name: "Open Tentacles",
@@ -85,6 +97,7 @@ export const projects: Project[] = [
     repo: "warengonzaga/opententacles",
     category: "featured",
     language: "TypeScript",
+    focus: "AI/Bun",
     emoji: "🐙🤖🔧",
   },
   {
@@ -94,11 +107,65 @@ export const projects: Project[] = [
     website: "https://waren.build/contribute-now/",
     category: "featured",
     language: "TypeScript",
+    focus: "AI/CLI",
     emoji: "🤝🔄💻",
     isNew: true,
   },
+  {
+    name: "Anytype MCP Plugin",
+    description: "Authenticated Anytype MCP integration for Codex and ChatGPT",
+    repo: "wgtechlabs/anytype-mcp-plugin",
+    category: "featured",
+    language: "TypeScript",
+    focus: "AI/MCP",
+    emoji: "📓🔌🤖",
+  },
+  {
+    name: "Clean Workflow",
+    description: "Workflow and skills conventions for AI agents",
+    repo: "wgtechlabs/clean-workflow",
+    category: "featured",
+    language: "Python",
+    focus: "AI/Skill",
+    emoji: "🧹🗺️🤖",
+  },
+  {
+    name: "Clean README",
+    description: "AI-assisted README skill",
+    repo: "wgtechlabs/clean-readme",
+    category: "featured",
+    language: "JavaScript",
+    focus: "AI/Skill",
+    status: "planned",
+    emoji: "🧹📄✨",
+  },
+  {
+    name: "Clean Code Review",
+    description: "AI-agent skill for evidence-backed code and PR reviews",
+    repo: "wgtechlabs/clean-code-review",
+    category: "featured",
+    focus: "AI/Skill",
+    emoji: "🧹🔎✅",
+  },
+  {
+    name: "Clean Coding",
+    description: "AI-agent skill for implementation, fixes, and refactoring",
+    repo: "wgtechlabs/clean-coding",
+    category: "featured",
+    focus: "AI/Skill",
+    emoji: "🧹💻✨",
+  },
+  {
+    name: "OpenDots Railway",
+    description: "Railway deployment template for CopilotKit OpenDots",
+    repo: "warengonzaga/opendots-railway",
+    category: "featured",
+    language: "JavaScript",
+    focus: "AI/Railway",
+    emoji: "🚂🤖🌐",
+  },
 
-  // ── Labs (WG Tech Labs) ──
+  // Side projects — profile README order
   {
     name: "GitHub Copilot Chat Modes",
     description: "AI agents for smarter open-source projects",
@@ -116,8 +183,73 @@ export const projects: Project[] = [
     emoji: "🧹📝✅",
   },
   {
+    name: "Forum Support Discord Bot",
+    description: "Forum-based support bot",
+    repo: "wgtechlabs/forum-support-discord-bot",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "💬🤝🎮",
+  },
+  {
+    name: "Unthread Discord Bot",
+    description: "Unthread ticketing for Discord",
+    repo: "wgtechlabs/unthread-discord-bot",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "🎫🤖🎮",
+  },
+  {
+    name: "Log Engine",
+    description: "Node.js logging solution",
+    repo: "wgtechlabs/log-engine",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "📋🔍🛠️",
+  },
+  {
+    name: "Secrets Engine",
+    description: "TypeScript secure secret storage SDK",
+    repo: "wgtechlabs/secrets-engine",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "🔐🗝️🛡️",
+  },
+  {
+    name: "Config Engine",
+    description: "Fast, Bun-first configuration SDK",
+    repo: "wgtechlabs/config-engine",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "⚙️📦🔧",
+  },
+  {
+    name: "MDD Engine",
+    description: "Headless Markdown documentation engine",
+    repo: "wgtechlabs/mdd-engine",
+    category: "labs",
+    language: "TypeScript",
+    status: "spec",
+    emoji: "📚📝⚙️",
+  },
+  {
+    name: "Unthread Telegram Bot",
+    description: "Telegram to support tickets",
+    repo: "wgtechlabs/unthread-telegram-bot",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "🎫🤖✈️",
+  },
+  {
+    name: "Unthread WhatsApp Bot",
+    description: "WhatsApp to support tickets",
+    repo: "wgtechlabs/unthread-whatsapp-bot",
+    category: "labs",
+    language: "TypeScript",
+    emoji: "🎫🤖💬",
+  },
+  {
     name: "Build Flow Action",
-    description: "One workflow for CI, security, packaging, and releases",
+    description: "One workflow for CI, security, packaging, containers, and releases",
     repo: "wgtechlabs/build-flow-action",
     category: "labs",
     language: "YAML",
@@ -134,64 +266,8 @@ export const projects: Project[] = [
     isNew: true,
   },
   {
-    name: "Forum Support Discord Bot",
-    description: "Forum-based support bot for Discord",
-    repo: "wgtechlabs/forum-support-discord-bot",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "💬🤝🎮",
-  },
-  {
-    name: "Unthread Discord Bot",
-    description: "Unthread ticketing system for Discord",
-    repo: "wgtechlabs/unthread-discord-bot",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "🎫🤖🎮",
-  },
-  {
-    name: "Log Engine",
-    description: "Node.js logging solution",
-    repo: "wgtechlabs/log-engine",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "📋🔍🛠️",
-  },
-  {
-    name: "Secrets Engine",
-    description: "Secure secret storage SDK for TypeScript",
-    repo: "wgtechlabs/secrets-engine",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "🔐🗝️🛡️",
-  },
-  {
-    name: "Config Engine",
-    description: "Fast, Bun-first configuration SDK",
-    repo: "wgtechlabs/config-engine",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "⚙️📦🔧",
-  },
-  {
-    name: "Unthread Telegram Bot",
-    description: "Telegram to Unthread support tickets",
-    repo: "wgtechlabs/unthread-telegram-bot",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "🎫🤖✈️",
-  },
-  {
-    name: "Unthread WhatsApp Bot",
-    description: "WhatsApp to Unthread support tickets",
-    repo: "wgtechlabs/unthread-whatsapp-bot",
-    category: "labs",
-    language: "TypeScript",
-    emoji: "🎫🤖💬",
-  },
-  {
     name: "Container Build Flow",
-    description: "Docker container build automation action",
+    description: "Docker container build automation",
     repo: "wgtechlabs/container-build-flow-action",
     category: "labs",
     language: "YAML",
@@ -199,7 +275,7 @@ export const projects: Project[] = [
   },
   {
     name: "Package Build Flow",
-    description: "NPM package build automation action",
+    description: "NPM package build automation",
     repo: "wgtechlabs/package-build-flow-action",
     category: "labs",
     language: "YAML",
@@ -207,7 +283,7 @@ export const projects: Project[] = [
   },
   {
     name: "Release Build Flow",
-    description: "Automated release creation action",
+    description: "Automated release creation",
     repo: "wgtechlabs/release-build-flow-action",
     category: "labs",
     language: "YAML",
@@ -223,7 +299,7 @@ export const projects: Project[] = [
   },
   {
     name: "Nuvex",
-    description: "Structured memory SDK for AI agents",
+    description: "Structured memory SDK",
     repo: "wgtechlabs/nuvex",
     category: "labs",
     language: "TypeScript",
@@ -231,7 +307,7 @@ export const projects: Project[] = [
   },
   {
     name: "Unthread Webhook SDK",
-    description: "Unthread webhook TypeScript SDK",
+    description: "Unthread webhook SDK",
     repo: "wgtechlabs/unthread-webhook-sdk",
     category: "labs",
     language: "TypeScript",
@@ -239,7 +315,7 @@ export const projects: Project[] = [
   },
   {
     name: "Is Railway",
-    description: "Detect if running on Railway platform",
+    description: "Railway platform detector",
     repo: "wgtechlabs/is-railway",
     category: "labs",
     language: "TypeScript",
@@ -261,11 +337,28 @@ export const projects: Project[] = [
     language: "TypeScript",
     emoji: "🛡️🤖🎮",
   },
+  {
+    name: "COVID-19 Tracker CLI",
+    description: "COVID-19 terminal tracker",
+    repo: "OSSPhilippines/covid19-tracker-cli",
+    website: "https://covid19-cli.wareneutron.com",
+    category: "community",
+    language: "JavaScript",
+    emoji: "🦠📊💻",
+  },
+  {
+    name: "Matuto",
+    description: "Web3 browser extension",
+    repo: "Web3Philippines/matuto",
+    category: "community",
+    language: "TypeScript",
+    emoji: "📚🌐🧩",
+  },
 
-  // ── Projects (Open Source) ──
+  // Other projects — profile README order
   {
     name: "CSS Text Portrait Builder",
-    description: "Create stunning portraits using pure CSS",
+    description: "Pure CSS portrait builder",
     repo: "warengonzaga/css-text-portrait-builder",
     website: "https://waren.build/css-text-portrait-builder/",
     category: "projects",
@@ -309,7 +402,7 @@ export const projects: Project[] = [
   },
   {
     name: "Buy Me a Coffee.js",
-    description: "Buy Me a Coffee TypeScript SDK",
+    description: "Buy Me a Coffee SDK",
     repo: "warengonzaga/buymeacoffee.js",
     website: "https://buymeacoffee.js.org",
     category: "projects",
@@ -317,8 +410,26 @@ export const projects: Project[] = [
     emoji: "☕💛📦",
   },
   {
+    name: "Gather Town.js",
+    description: "Gather Town SDK",
+    repo: "warengonzaga/gathertown.js",
+    website: "https://gathertown.js.org",
+    category: "projects",
+    language: "JavaScript",
+    emoji: "🏘️👥📦",
+  },
+  {
+    name: "Daisy.js",
+    description: "Web animation plugin for particle systems",
+    repo: "warengonzaga/daisy.js",
+    website: "https://daisy.js.org",
+    category: "projects",
+    language: "JavaScript",
+    emoji: "🌸✨🎆",
+  },
+  {
     name: "Fork Corner",
-    description: "GitHub/GitLab fork corner label for your site",
+    description: "GitHub/GitLab fork corner label",
     repo: "warengonzaga/fork-corner",
     website: "https://fork-corner.warengonzaga.com",
     category: "projects",
@@ -334,8 +445,16 @@ export const projects: Project[] = [
     emoji: "💌❤️✨",
   },
   {
+    name: "thirdweb WP",
+    description: "thirdweb WordPress plugin",
+    repo: "warengonzaga/thirdweb-wp",
+    category: "projects",
+    language: "PHP",
+    emoji: "🌐🔌📰",
+  },
+  {
     name: "IPFS Support Extension",
-    description: "IPFS browser support extension",
+    description: "IPFS browser extension",
     repo: "warengonzaga/ipfs-support-extension",
     category: "projects",
     language: "JavaScript",
@@ -343,38 +462,11 @@ export const projects: Project[] = [
   },
   {
     name: "Arweave Support Extension",
-    description: "Arweave browser support extension",
+    description: "Arweave browser extension",
     repo: "warengonzaga/arweave-support-extension",
     category: "projects",
     language: "JavaScript",
     emoji: "🌐💎🔌",
-  },
-  {
-    name: "Is It Relay",
-    description: "Relay Protocol detector utility",
-    repo: "warengonzaga/is-it-relay",
-    website: "https://waren.build/is-it-relay/",
-    category: "projects",
-    language: "TypeScript",
-    emoji: "🔍🔗⚡",
-  },
-  {
-    name: "Relay Protocol Indexer App",
-    description: "Relay Protocol data indexer application",
-    repo: "warengonzaga/relay-protocol-indexer-app",
-    website: "https://waren.build/relay-protocol-indexer-app/",
-    category: "projects",
-    language: "TypeScript",
-    emoji: "📊🔗🗄️",
-  },
-  {
-    name: "Relay Protocol Stats",
-    description: "Relay Protocol analytics dashboard",
-    repo: "warengonzaga/relay-protocol-stats",
-    website: "https://waren.build/relay-protocol-stats/",
-    category: "projects",
-    language: "TypeScript",
-    emoji: "📈🔗📊",
   },
   {
     name: "PCSO 2D Lotto Generator",
@@ -395,7 +487,7 @@ export const projects: Project[] = [
   },
   {
     name: "GitHub Labels Template",
-    description: "Apply curated GitHub labels to your repo",
+    description: "Apply curated GitHub labels",
     repo: "warengonzaga/github-labels-template",
     website: "https://waren.build/github-labels-template/",
     category: "projects",
@@ -412,60 +504,60 @@ export const projects: Project[] = [
     language: "TypeScript",
     emoji: "🛒💰📦",
   },
-  {
-    name: "Gather Town.js",
-    description: "Gather Town JavaScript SDK",
-    repo: "warengonzaga/gathertown.js",
-    website: "https://gathertown.js.org",
-    category: "projects",
-    language: "JavaScript",
-    emoji: "🏘️👥📦",
-  },
-  {
-    name: "Daisy.js",
-    description: "Web animation plugin for particle systems",
-    repo: "warengonzaga/daisy.js",
-    website: "https://daisy.js.org",
-    category: "projects",
-    language: "JavaScript",
-    emoji: "🌸✨🎆",
-  },
-  {
-    name: "thirdweb WP",
-    description: "thirdweb WordPress plugin",
-    repo: "warengonzaga/thirdweb-wp",
-    category: "projects",
-    language: "PHP",
-    emoji: "🌐🔌📰",
-  },
 
-  // ── Community ──
-  {
-    name: "COVID-19 Tracker CLI",
-    description: "COVID-19 statistics tracker for the terminal",
-    repo: "OSSPhilippines/covid19-tracker-cli",
-    website: "https://covid19-cli.wareneutron.com",
-    category: "community",
-    language: "JavaScript",
-    emoji: "🦠📊💻",
-  },
-  {
-    name: "Matuto",
-    description: "Web3 educational browser extension",
-    repo: "Web3Philippines/matuto",
-    category: "community",
-    language: "TypeScript",
-    emoji: "📚🌐🧩",
-  },
-
-  // ── Legacy ──
+  // Legacy work — profile README order
   {
     name: "Animate.css",
-    description: "Cross-browser library of CSS animations",
+    description: "A cross-browser library of CSS animations",
     repo: "animate-css/animate.css",
     website: "https://animate.style/",
     category: "legacy",
     language: "CSS",
     emoji: "✨🎭🎬",
+  },
+  {
+    name: "Is It Relay",
+    description: "Relay Protocol detector",
+    repo: "warengonzaga/is-it-relay",
+    website: "https://waren.build/is-it-relay/",
+    category: "legacy",
+    language: "TypeScript",
+    emoji: "🔍🔗⚡",
+  },
+  {
+    name: "Relay Protocol Stats",
+    description: "Relay Protocol analytics dashboard",
+    repo: "warengonzaga/relay-protocol-stats",
+    website: "https://waren.build/relay-protocol-stats/",
+    category: "legacy",
+    language: "TypeScript",
+    emoji: "📈🔗📊",
+  },
+  {
+    name: "Relay Protocol Indexer App",
+    description: "Relay Protocol data indexer application",
+    repo: "warengonzaga/relay-protocol-indexer-app",
+    website: "https://waren.build/relay-protocol-indexer-app/",
+    category: "legacy",
+    language: "TypeScript",
+    emoji: "📊🔗🗄️",
+  },
+  {
+    name: "Relay World",
+    description: "Three.js crosschain activity visualization, also known as Relay City",
+    repo: "warengonzaga/relay-world",
+    website: "https://waren.build/relay-world/",
+    category: "legacy",
+    language: "JavaScript",
+    focus: "Three.js",
+    emoji: "🏙️🔗✨",
+  },
+  {
+    name: "Relay Protocol MCP Server",
+    description: "Model Context Protocol server for the Relay Protocol REST API",
+    repo: "warengonzaga/relay-protocol-mcp-server",
+    category: "legacy",
+    language: "TypeScript",
+    emoji: "🔌🔗🤖",
   },
 ];

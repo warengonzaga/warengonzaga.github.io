@@ -45,6 +45,18 @@ body {
   overflow-x: hidden;
 }
 
+::selection {
+  background: rgba(1, 110, 234, 0.45);
+  color: #fff;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #8ec5ff;
+  outline-offset: 3px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -702,11 +714,11 @@ a {
   min-width: 0;
 }
 
-.now-building-emoji {
-  font-size: 2.5rem;
-  line-height: 1;
+.now-building-logo {
+  width: 72px;
+  height: 72px;
   flex-shrink: 0;
-  padding-top: 2px;
+  display: block;
 }
 
 .now-building-info {
@@ -838,6 +850,8 @@ a {
 .filter-tabs {
   display: flex;
   gap: 4px;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -872,6 +886,14 @@ a {
   border-color: var(--accent);
 }
 
+.tab-count {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.72;
+}
+
 .filter-search {
   display: flex;
   align-items: center;
@@ -880,7 +902,8 @@ a {
   border: 1px solid var(--border);
   border-radius: 100px;
   padding: 8px 16px;
-  min-width: 220px;
+  min-width: 0;
+  width: min(100%, 280px);
   transition: border-color var(--transition);
 }
 
@@ -912,8 +935,56 @@ a {
    ============================================ */
 
 .projects-section {
-  padding: 48px 0 80px;
+  padding: 40px 0 88px;
   min-height: 50vh;
+}
+
+.catalog-count {
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: #b7c3d6;
+}
+
+#projects-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  scroll-margin-top: 96px;
+}
+
+.chapter-head {
+  margin-bottom: 22px;
+}
+
+.chapter-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.chapter-title {
+  font-size: clamp(1.45rem, 2vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.chapter-summary {
+  max-width: 52ch;
+  margin-top: 6px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #b7c0d4;
+}
+
+.chapter-count {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: #9fb0c8;
 }
 
 .projects-grid {
@@ -944,7 +1015,16 @@ a {
 }
 
 .project-card.featured {
-  border-color: rgba(1, 59, 132, 0.2);
+  border-color: rgba(1, 110, 234, 0.28);
+}
+
+.project-card.legacy {
+  filter: opacity(0.62);
+}
+
+.project-card.legacy:hover,
+.project-card.legacy:focus-within {
+  filter: none;
 }
 
 @keyframes card-in {
@@ -1071,12 +1151,41 @@ a {
   margin-top: auto;
 }
 
+.card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
 .card-lang {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 0.8rem;
-  color: var(--text-dim);
+  color: #a8b3c7;
+}
+
+.focus-pill,
+.status-note {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.focus-pill {
+  color: #d7e8ff;
+  background: rgba(126, 200, 255, 0.12);
+}
+
+.status-note {
+  flex-shrink: 0;
+  color: #1c160c;
+  background: #f0d7a2;
 }
 
 .lang-dot {
@@ -1102,7 +1211,7 @@ a {
 .projects-empty {
   text-align: center;
   padding: 80px 24px;
-  color: var(--text-dim);
+  color: #b7c0d4;
   font-size: 1rem;
 }
 
@@ -1451,7 +1560,7 @@ a {
   }
 
   .filter-search {
-    min-width: unset;
+    width: 100%;
   }
 
   .projects-grid {
@@ -1512,8 +1621,9 @@ a {
     justify-content: center;
   }
 
-  .now-building-emoji {
-    font-size: 2rem;
+  .now-building-logo {
+    width: 64px;
+    height: 64px;
   }
 
   .gh-stars-section {
@@ -1541,6 +1651,21 @@ a {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .new-badge {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #projects-catalog {
+    gap: 48px;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-title {
     font-size: 2rem;
@@ -1548,10 +1673,6 @@ a {
 
   .hero-desc {
     font-size: 1rem;
-  }
-
-  .project-card {
-    padding: 20px;
   }
 
   .gh-stars-title {
