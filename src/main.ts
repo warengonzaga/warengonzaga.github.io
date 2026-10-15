@@ -470,10 +470,82 @@ if (wanderingStar && hero && nominateSection) {
     }
   }
 
+  const RAINBOW = ["#ff3b30", "#ff9500", "#ffd60a", "#34c759", "#0a84ff", "#5e5ce6", "#bf5af2"];
+  const trailLayer = document.createElement("div");
+  trailLayer.className = "star-trail";
+  trailLayer.setAttribute("aria-hidden", "true");
+  hero.appendChild(trailLayer);
+  const trailDots: HTMLElement[] = [];
+  let trailIndex = 0;
+  let trailFrame = 0;
+  let lastTrailX = Number.NaN;
+  let lastTrailY = Number.NaN;
+
+  function clearTrail() {
+    window.cancelAnimationFrame(trailFrame);
+    trailFrame = 0;
+    lastTrailX = Number.NaN;
+    lastTrailY = Number.NaN;
+    for (const dot of trailDots) dot.remove();
+    trailDots.length = 0;
+  }
+
+  function starCenter() {
+    const rect = star.getBoundingClientRect();
+    const heroRect = hero!.getBoundingClientRect();
+    return {
+      x: rect.left - heroRect.left + rect.width / 2,
+      y: rect.top - heroRect.top + rect.height / 2,
+    };
+  }
+
+  function dropTrailDot(x: number, y: number) {
+    const dot = document.createElement("span");
+    dot.className = "star-trail-dot";
+    dot.setAttribute("aria-hidden", "true");
+    const color = RAINBOW[trailIndex % RAINBOW.length];
+    trailIndex += 1;
+    dot.style.left = `${x}px`;
+    dot.style.top = `${y}px`;
+    dot.style.background = color;
+    dot.style.boxShadow = `0 0 10px ${color}`;
+    trailLayer.appendChild(dot);
+    trailDots.push(dot);
+    while (trailDots.length > 14) trailDots.shift()?.remove();
+    dot.addEventListener("animationend", () => {
+      dot.remove();
+      const index = trailDots.indexOf(dot);
+      if (index >= 0) trailDots.splice(index, 1);
+    });
+  }
+
+  function trailStep(token: number) {
+    if (token !== motionToken || reducedMotion() || !starIsShown()) return;
+    trailFrame = window.requestAnimationFrame(() => trailStep(token));
+    if (!isMoving || star.classList.contains("open")) return;
+    const point = starCenter();
+    const dx = point.x - lastTrailX;
+    const dy = point.y - lastTrailY;
+    if (Number.isNaN(lastTrailX) || dx * dx + dy * dy >= 16 * 16) {
+      dropTrailDot(point.x, point.y);
+      lastTrailX = point.x;
+      lastTrailY = point.y;
+    }
+  }
+
+  function startTrail(token: number) {
+    if (reducedMotion()) return;
+    window.cancelAnimationFrame(trailFrame);
+    lastTrailX = Number.NaN;
+    lastTrailY = Number.NaN;
+    trailFrame = window.requestAnimationFrame(() => trailStep(token));
+  }
+
   function pauseMotion() {
     motionToken += 1;
     window.clearTimeout(wanderTimer);
     window.clearTimeout(sparkleTimer);
+    clearTrail();
     gsap.killTweensOf(star);
     gsap.killTweensOf(glowEl);
     isMoving = false;
@@ -570,6 +642,7 @@ if (wanderingStar && hero && nominateSection) {
     const token = motionToken;
     scheduleWander(token, 600);
     sparkleTimer = window.setTimeout(() => sparkleLoop(token), 800);
+    startTrail(token);
   }
 
   function syncStar() {
