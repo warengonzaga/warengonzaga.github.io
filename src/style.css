@@ -425,6 +425,30 @@ a {
   z-index: 2;
 }
 
+/* Rainbow tail behind the wandering star. Decorative only. */
+.star-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star-trail-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: star-trail-fade 0.7s linear forwards;
+}
+
+@keyframes star-trail-fade {
+  from { opacity: 0.95; }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+}
+
 /* Star popup */
 .wandering-star-popup {
   position: absolute;
@@ -1367,6 +1391,13 @@ a {
   50% { transform: scale(1.1); filter: drop-shadow(0 0 30px rgba(250, 55, 104, 0.7)) drop-shadow(0 0 50px rgba(121, 226, 255, 0.5)); }
 }
 
+.gh-stars-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 .gh-stars-title {
   font-size: 2rem;
   font-weight: 800;
@@ -1375,6 +1406,16 @@ a {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.2;
+}
+
+.gh-stars-dream {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.45;
+  background: linear-gradient(135deg, #fff, #79e2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .gh-stars-desc {
@@ -1681,6 +1722,10 @@ a {
     font-size: 1.5rem;
   }
 
+  .gh-stars-dream {
+    font-size: 1.1rem;
+  }
+
   .gh-stars-icon {
     font-size: 3rem;
   }
@@ -1720,6 +1765,11 @@ a {
   .star-nominate-link {
     transition: none;
   }
+
+  .star-trail-dot {
+    animation: none;
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1739,6 +1789,10 @@ a {
 
   .gh-stars-title {
     font-size: 1.25rem;
+  }
+
+  .gh-stars-dream {
+    font-size: 1rem;
   }
 
   .gh-stars-desc {
