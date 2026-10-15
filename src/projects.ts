@@ -9,6 +9,8 @@ export interface Project {
   language?: string;
   emoji: string;
   isNew?: boolean;
+  /** Stays visible in the current list. Other current projects collapse below it. */
+  lead?: boolean;
   website?: string;
   focus?: string;
   status?: ProjectStatus;
@@ -44,6 +46,7 @@ export const langColors: Record<string, string> = {
 
 export const projects: Project[] = [
   // Current — profile README order. Rove is the spotlight above the grid.
+  // `lead` projects stay beside that spotlight; the rest collapse under "More current work".
   {
     name: "Devin Discord Bot",
     description: "Deploy Devin, your friendly AI software engineer, directly into Discord",
@@ -52,6 +55,7 @@ export const projects: Project[] = [
     focus: "AI/Bot",
     emoji: "💬🤖💻",
     isNew: true,
+    lead: true,
   },
   {
     name: "Devin Telegram Bot",
@@ -61,6 +65,7 @@ export const projects: Project[] = [
     focus: "AI/Bot",
     emoji: "📱🤖💻",
     isNew: true,
+    lead: true,
   },
   {
     name: "Magic Commit",
@@ -70,6 +75,7 @@ export const projects: Project[] = [
     language: "TypeScript",
     focus: "AI/CLI",
     emoji: "🪄📝🤖",
+    lead: true,
   },
   {
     name: "Magic Release",
