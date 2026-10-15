@@ -1,3 +1,3 @@
-# Open Source Portfolio
+# Waren Gonzaga | Open Source Software Engineer
 
-My official open source portfolio.
+Self-taught software engineer Waren Gonzaga ships open source AI, developer tools, SDKs, and bots. Now building Rove, a self-hosted company AI agent.
