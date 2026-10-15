@@ -1412,26 +1412,10 @@ a {
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.45;
-  color: #fff;
-}
-
-.gh-stars-dream-text {
   background: linear-gradient(135deg, #fff, #79e2ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.gh-stars-dream-ph {
-  white-space: nowrap;
-}
-
-.ph-flag {
-  display: inline-block;
-  height: 0.95em;
-  width: 1.9em;
-  margin-inline: 0.28em 0.12em;
-  vertical-align: -0.12em;
 }
 
 .gh-stars-desc {
