@@ -425,6 +425,30 @@ a {
   z-index: 2;
 }
 
+/* Rainbow tail behind the wandering star. Decorative only. */
+.star-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star-trail-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: star-trail-fade 0.7s linear forwards;
+}
+
+@keyframes star-trail-fade {
+  from { opacity: 0.95; }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+}
+
 /* Star popup */
 .wandering-star-popup {
   position: absolute;
@@ -1719,6 +1743,11 @@ a {
   .wandering-star-popup,
   .star-nominate-link {
     transition: none;
+  }
+
+  .star-trail-dot {
+    animation: none;
+    display: none;
   }
 }
 
