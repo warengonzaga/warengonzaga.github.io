@@ -45,7 +45,7 @@ export const langColors: Record<string, string> = {
 };
 
 export const projects: Project[] = [
-  // Current — profile README order. Rove is the spotlight above the grid.
+  // Current: profile README order. Rove is the spotlight above the grid.
   // `lead` projects stay beside that spotlight; the rest collapse under "More current work".
   {
     name: "Devin Discord Bot",
@@ -171,7 +171,7 @@ export const projects: Project[] = [
     emoji: "🚂🤖🌐",
   },
 
-  // Side projects — profile README order
+  // Side projects: profile README order
   {
     name: "GitHub Copilot Chat Modes",
     description: "AI agents for smarter open-source projects",
@@ -361,7 +361,7 @@ export const projects: Project[] = [
     emoji: "📚🌐🧩",
   },
 
-  // Other projects — profile README order
+  // Other projects: profile README order
   {
     name: "CSS Text Portrait Builder",
     description: "Pure CSS portrait builder",
@@ -511,7 +511,7 @@ export const projects: Project[] = [
     emoji: "🛒💰📦",
   },
 
-  // Legacy work — profile README order
+  // Legacy work: profile README order
   {
     name: "Animate.css",
     description: "A cross-browser library of CSS animations",

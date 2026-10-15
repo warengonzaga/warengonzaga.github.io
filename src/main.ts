@@ -343,7 +343,7 @@ if (heroName) {
   let holdX = 0;
   let holdY = 0;
 
-  // Fountain: particles arc upward then fall — single tween with physics-like cubic bezier
+  // Fountain: particles arc upward then fall, a single tween with physics-like cubic bezier
   function spawnFountain(x: number, y: number, count: number) {
     const toSpawn = Math.min(count, MAX_PARTICLES - activeParticles);
     if (toSpawn <= 0) return;
@@ -383,7 +383,7 @@ if (heroName) {
       // Rotation: linear spin
       gsap.to(el, { rotation, duration: dur, ease: "none" });
 
-      // Vertical: single tween — up then down using a bezier-like custom ease
+      // Vertical: single tween, up then down using a bezier-like custom ease
       // cubic-bezier(0.2, 0.8, 0.6, -0.2) gives a natural throw arc
       gsap.to(el, {
         keyframes: [
