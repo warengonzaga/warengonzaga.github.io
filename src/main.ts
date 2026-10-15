@@ -377,6 +377,269 @@ if (heroName) {
   });
 }
 
+// --- Floating star: hidden until the nomination section has been seen ---
+const STAR_UNLOCK_KEY = "waren-build-star-unlocked";
+const wanderingStar = document.getElementById("wandering-star");
+const hero = document.querySelector(".hero") as HTMLElement | null;
+const nominateSection = document.querySelector(".gh-stars-section");
+
+if (wanderingStar && hero && nominateSection) {
+  const star = wanderingStar;
+  const toggle = star.querySelector<HTMLButtonElement>(".wandering-star-toggle")!;
+  const popup = document.getElementById("wandering-star-popup")!;
+  const glowEl = star.querySelector(".wandering-star-glow") as HTMLElement;
+  const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const sparkleColors = ["#fa3768", "#79e2ff", "#fff", "#fac832", "#8b5cf6"];
+
+  let unlocked = false;
+  let heroInView = false;
+  let motionToken = 0;
+  let wanderTimer = 0;
+  let sparkleTimer = 0;
+  let isMoving = false;
+  let currentSpeed = 0;
+
+  try {
+    unlocked = localStorage.getItem(STAR_UNLOCK_KEY) === "1";
+  } catch {
+    unlocked = false;
+  }
+
+  const isMobile = window.innerWidth <= 768;
+  const zones = isMobile
+    ? [
+        { top: [3, 10], left: [5, 35] },
+        { top: [3, 10], left: [65, 92] },
+        { top: [75, 88], left: [65, 92] },
+        { top: [75, 88], left: [5, 35] },
+      ]
+    : [
+        { top: [5, 15], left: [5, 40] },
+        { top: [5, 15], left: [60, 95] },
+        { top: [20, 55], left: [82, 95] },
+        { top: [58, 78], left: [80, 95] },
+        { top: [58, 78], left: [3, 18] },
+        { top: [20, 55], left: [3, 16] },
+      ];
+  let lastZone = isMobile ? 1 : 2;
+
+  function reducedMotion() {
+    return motionQuery.matches;
+  }
+
+  function starIsShown() {
+    return unlocked && heroInView;
+  }
+
+  function randomPos() {
+    const step = Math.random() < 0.6
+      ? (Math.random() < 0.5 ? 1 : -1)
+      : (Math.random() < 0.5 ? 2 : -2);
+    lastZone = (lastZone + step + zones.length) % zones.length;
+    const zone = zones[lastZone];
+    return {
+      top: zone.top[0] + Math.random() * (zone.top[1] - zone.top[0]),
+      left: zone.left[0] + Math.random() * (zone.left[1] - zone.left[0]),
+    };
+  }
+
+  function setOpen(open: boolean) {
+    star.classList.toggle("open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    popup.inert = !open;
+    if (!open) return;
+
+    gsap.killTweensOf(star);
+    gsap.killTweensOf(glowEl);
+    isMoving = false;
+    currentSpeed = 0;
+    if (!reducedMotion()) {
+      gsap.to(glowEl, { width: 60, height: 60, opacity: 0.5, duration: 0.4 });
+    }
+
+    const starRect = star.getBoundingClientRect();
+    const heroRect = hero!.getBoundingClientRect();
+    if (starRect.top - heroRect.top < 140) {
+      popup.style.bottom = "auto";
+      popup.style.top = "calc(100% + 16px)";
+      popup.classList.add("flipped");
+    } else {
+      popup.style.bottom = "calc(100% + 16px)";
+      popup.style.top = "auto";
+      popup.classList.remove("flipped");
+    }
+  }
+
+  function pauseMotion() {
+    motionToken += 1;
+    window.clearTimeout(wanderTimer);
+    window.clearTimeout(sparkleTimer);
+    gsap.killTweensOf(star);
+    gsap.killTweensOf(glowEl);
+    isMoving = false;
+    currentSpeed = 0;
+  }
+
+  function scheduleWander(token: number, delay: number) {
+    window.clearTimeout(wanderTimer);
+    wanderTimer = window.setTimeout(() => wanderStep(token), delay);
+  }
+
+  function wanderStep(token: number) {
+    if (token !== motionToken || !starIsShown() || reducedMotion()) return;
+    if (star.classList.contains("open")) {
+      scheduleWander(token, 500);
+      return;
+    }
+
+    const pos = randomPos();
+    const speed = 2.5 + Math.random() * 3;
+    const rest = 2 + Math.random() * 3;
+    currentSpeed = 1 - (speed - 2.5) / 3;
+    isMoving = true;
+
+    const glowSize = 60 + currentSpeed * 60;
+    gsap.to(glowEl, {
+      width: glowSize,
+      height: glowSize,
+      opacity: 0.5 + currentSpeed * 0.5,
+      duration: 0.6,
+      ease: "power2.out",
+    });
+
+    gsap.to(star, {
+      top: `${pos.top}%`,
+      left: `${pos.left}%`,
+      duration: speed,
+      ease: "sine.inOut",
+      onComplete: () => {
+        if (token !== motionToken) return;
+        isMoving = false;
+        currentSpeed = 0;
+        gsap.to(glowEl, { width: 60, height: 60, opacity: 0.5, duration: 1, ease: "power2.out" });
+        scheduleWander(token, rest * 1000);
+      },
+    });
+  }
+
+  function spawnSparkle() {
+    if (star.classList.contains("open") || !starIsShown()) return;
+    const rect = star.getBoundingClientRect();
+    const heroRect = hero!.getBoundingClientRect();
+    const sparkle = document.createElement("div");
+    sparkle.className = "sparkle-particle";
+    const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+    const size = 2 + currentSpeed * 3 + Math.random() * (2 + currentSpeed * 3);
+    const spread = 8 + currentSpeed * 12;
+    const x = rect.left - heroRect.left + rect.width / 2 + (Math.random() - 0.5) * spread;
+    const y = rect.top - heroRect.top + rect.height / 2 + (Math.random() - 0.5) * spread;
+    const glowRadius = size * (2 + currentSpeed * 2);
+    sparkle.style.cssText = `
+      left: ${x}px; top: ${y}px;
+      width: ${size}px; height: ${size}px;
+      background: ${color};
+      box-shadow: 0 0 ${glowRadius}px ${color};
+    `;
+    hero!.appendChild(sparkle);
+
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 20 + Math.random() * 30 + currentSpeed * 20;
+    gsap.to(sparkle, {
+      x: Math.cos(angle) * dist,
+      y: Math.sin(angle) * dist,
+      opacity: 0,
+      scale: 0,
+      duration: 0.5 + Math.random() * 0.6 + currentSpeed * 0.3,
+      ease: "power2.out",
+      onComplete: () => sparkle.remove(),
+    });
+  }
+
+  function sparkleLoop(token: number) {
+    if (token !== motionToken || !starIsShown() || reducedMotion()) return;
+    spawnSparkle();
+    const delay = isMoving
+      ? 60 + (1 - currentSpeed) * 200 + Math.random() * 60
+      : 400 + Math.random() * 150;
+    sparkleTimer = window.setTimeout(() => sparkleLoop(token), delay);
+  }
+
+  function startMotion() {
+    if (reducedMotion() || !starIsShown()) return;
+    pauseMotion();
+    const token = motionToken;
+    scheduleWander(token, 600);
+    sparkleTimer = window.setTimeout(() => sparkleLoop(token), 800);
+  }
+
+  function syncStar() {
+    if (!starIsShown()) {
+      setOpen(false);
+      pauseMotion();
+      star.hidden = true;
+      return;
+    }
+    const wasHidden = star.hidden;
+    star.hidden = false;
+    if (wasHidden) startMotion();
+  }
+
+  function unlockStar() {
+    if (unlocked) return;
+    unlocked = true;
+    try {
+      localStorage.setItem(STAR_UNLOCK_KEY, "1");
+    } catch {
+      // Storage can be blocked. The in-memory unlock still lasts for this visit.
+    }
+    syncStar();
+  }
+
+  function resumeAfterClose() {
+    if (reducedMotion() || !starIsShown()) return;
+    scheduleWander(motionToken, 1000);
+  }
+
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const opening = !star.classList.contains("open");
+    setOpen(opening);
+    if (!opening) resumeAfterClose();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!star.classList.contains("open") || star.contains(event.target as Node)) return;
+    setOpen(false);
+    resumeAfterClose();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !star.classList.contains("open")) return;
+    setOpen(false);
+    toggle.focus();
+    resumeAfterClose();
+  });
+
+  motionQuery.addEventListener("change", () => {
+    if (reducedMotion()) pauseMotion();
+    else if (starIsShown()) startMotion();
+  });
+
+  new IntersectionObserver((entries) => {
+    heroInView = entries.some((entry) => entry.isIntersecting);
+    syncStar();
+  }, { threshold: 0.25 }).observe(hero);
+
+  if (!unlocked) {
+    const nominationWatch = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      unlockStar();
+      nominationWatch.disconnect();
+    }, { threshold: 0.25 });
+    nominationWatch.observe(nominateSection);
+  }
+}
+
 // --- Rainbow & Unicorn click effect (fountain style) ---
 (() => {
   const unicorns = ["🦄", "🌈", "✨", "💖", "⭐", "🌟", "💫"];
@@ -457,7 +720,7 @@ if (heroName) {
   }
 
   function isInteractive(target: HTMLElement) {
-    return !!target.closest("a, button, input, summary, .filter-tab, .icon-btn");
+    return !!target.closest("a, button, input, summary, .wandering-star, .filter-tab, .icon-btn");
   }
 
   function startHold(x: number, y: number) {
