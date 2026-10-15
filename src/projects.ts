@@ -11,6 +11,10 @@ export interface Project {
   isNew?: boolean;
   /** Stays visible in the current list. Other current projects collapse below it. */
   lead?: boolean;
+  /** Spotlight above the catalog. Counted, but not repeated as a grid card. */
+  spotlight?: boolean;
+  /** Logo for the spotlight card. */
+  icon?: string;
   website?: string;
   focus?: string;
   status?: ProjectStatus;
@@ -45,8 +49,9 @@ export const langColors: Record<string, string> = {
 };
 
 export const projects: Project[] = [
-  // Current: profile README order. Rove is the spotlight above the grid.
-  // `lead` projects stay beside that spotlight; the rest collapse under "More current work".
+  // Current: profile README order.
+  // The spotlight project is the card above the grid and is not repeated below.
+  // `lead` projects stay visible; the rest collapse under "More current work".
   {
     name: "Devin Discord Bot",
     description: "Deploy Devin, your friendly AI software engineer, directly into Discord",
@@ -116,6 +121,17 @@ export const projects: Project[] = [
     focus: "AI/CLI",
     emoji: "🤝🔄💻",
     isNew: true,
+  },
+  {
+    name: "Rove",
+    description: "Your company's agent, shaped by your workflows. A self-hosted company AI agent.",
+    repo: "wgtechlabs/rove",
+    category: "featured",
+    language: "TypeScript",
+    focus: "AI/TypeScript",
+    emoji: "🤖🏢✨",
+    icon: "/rove-app-icon.svg",
+    spotlight: true,
   },
   {
     name: "Anytype MCP Plugin",

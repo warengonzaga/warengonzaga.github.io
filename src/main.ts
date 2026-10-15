@@ -95,6 +95,10 @@ function cardHtml(p: Project, i: number) {
       </article>`;
 }
 
+function gridProjects(items: Project[]) {
+  return items.filter((project) => !project.spotlight);
+}
+
 function currentLists(items: Project[]) {
   const shown = items.filter((project) => project.lead);
   if (shown.length === 0) return { shown: items, more: [] as Project[] };
@@ -148,16 +152,61 @@ function render() {
       : chapters;
     catalog.innerHTML = visible
       .map((chapter) => {
-        const items = filtered.filter((p) => chapter.categories.includes(p.category));
+        const items = gridProjects(filtered.filter((p) => chapter.categories.includes(p.category)));
         return items.length ? chapterHtml(chapter.title, chapter.summary, items, chapter.current) : "";
       })
       .join("");
     return;
   }
 
+  const cards = gridProjects(filtered);
   catalogCount.style.display = "block";
+  // The count includes the spotlight. The grid does not draw that card again.
   catalogCount.textContent = `${filtered.length} project${filtered.length === 1 ? "" : "s"}`;
-  catalog.innerHTML = `<div class="projects-grid">${filtered.map(cardHtml).join("")}</div>`;
+  catalog.innerHTML = cards.length
+    ? `<div class="projects-grid">${cards.map(cardHtml).join("")}</div>`
+    : "";
+}
+
+function renderSpotlight() {
+  const project = projects.find((item) => item.spotlight);
+  const section = document.querySelector<HTMLElement>(".now-building-section");
+  if (!section) return;
+  if (!project) {
+    section.hidden = true;
+    return;
+  }
+
+  const name = section.querySelector(".now-building-name");
+  const desc = section.querySelector(".now-building-desc");
+  const lang = section.querySelector<HTMLElement>(".now-building-lang");
+  const logo = section.querySelector<HTMLImageElement>(".now-building-logo");
+  const link = section.querySelector<HTMLAnchorElement>(".now-building-actions a");
+
+  if (name) name.textContent = project.name;
+  if (desc) desc.textContent = project.description;
+  if (lang) {
+    if (project.language) {
+      const color = langColors[project.language] || "#8ec5ff";
+      lang.innerHTML = `<span class="lang-dot" style="background: ${color}"></span>${escapeHtml(project.language)}`;
+      lang.hidden = false;
+    } else {
+      lang.hidden = true;
+    }
+  }
+  if (logo) {
+    if (project.icon) {
+      logo.src = project.icon;
+      logo.hidden = false;
+    } else {
+      logo.hidden = true;
+    }
+  }
+  if (link) {
+    link.href = `https://github.com/${project.repo}`;
+    link.setAttribute("aria-label", `View ${project.name} on GitHub`);
+    link.hidden = false;
+  }
 }
 
 function setTabCounts() {
@@ -464,5 +513,6 @@ if (heroName) {
 
 // --- Init ---
 projectCount.textContent = `${projects.length} projects`;
+renderSpotlight();
 setTabCounts();
 render();
