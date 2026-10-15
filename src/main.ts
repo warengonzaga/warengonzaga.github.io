@@ -463,6 +463,6 @@ if (heroName) {
 })();
 
 // --- Init ---
-projectCount.textContent = `${projects.length + 1} projects`;
+projectCount.textContent = `${projects.length} projects`;
 setTabCounts();
 render();
