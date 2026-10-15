@@ -13,11 +13,12 @@ const projectCount = document.getElementById("project-count")!;
 let activeFilter: Category | "all" = "all";
 let searchQuery = "";
 
-const chapters: { title: string; summary: string; categories: Category[]; legacy?: boolean }[] = [
+const chapters: { title: string; summary: string; categories: Category[]; legacy?: boolean; current?: boolean }[] = [
   {
     title: "Current",
-    summary: "What I'm shipping now. Rove stays in the spotlight above.",
+    summary: "A few projects beside Rove, the focus above.",
     categories: ["featured"],
+    current: true,
   },
   {
     title: "Side projects",
@@ -94,23 +95,41 @@ function cardHtml(p: Project, i: number) {
       </article>`;
 }
 
-function chapterHtml(title: string, summary: string, items: Project[]) {
+function currentLists(items: Project[]) {
+  const shown = items.filter((project) => project.lead);
+  if (shown.length === 0) return { shown: items, more: [] as Project[] };
+  return { shown, more: items.filter((project) => !project.lead) };
+}
+
+function chapterHtml(title: string, summary: string, items: Project[], current = false) {
+  const { shown, more } = current ? currentLists(items) : { shown: items, more: [] as Project[] };
+  const moreHtml = more.length
+    ? `<details class="chapter-more">
+        <summary><span>More current work</span><span class="chapter-count">${more.length}</span></summary>
+        <div class="projects-grid">${more.map(cardHtml).join("")}</div>
+      </details>`
+    : "";
+
   return `
     <section class="catalog-chapter">
       <div class="chapter-head">
         <div class="chapter-title-row">
           <h2 class="chapter-title">${title}</h2>
-          <span class="chapter-count">${items.length}</span>
+          <span class="chapter-count">${shown.length}</span>
         </div>
         <p class="chapter-summary">${summary}</p>
       </div>
-      <div class="projects-grid">${items.map(cardHtml).join("")}</div>
+      <div class="projects-grid">${shown.map(cardHtml).join("")}</div>
+      ${moreHtml}
     </section>`;
 }
 
 function render() {
   const filtered = getFiltered();
-  const grouped = activeFilter === "all" && !searchQuery;
+  const showChapters =
+    (activeFilter === "all" && !searchQuery) ||
+    activeFilter === "legacy" ||
+    (activeFilter === "featured" && !searchQuery);
 
   if (filtered.length === 0) {
     catalog.innerHTML = "";
@@ -121,15 +140,16 @@ function render() {
 
   empty.style.display = "none";
 
-  if (grouped || activeFilter === "legacy") {
+  if (showChapters) {
     catalogCount.style.display = "none";
-    const visible = activeFilter === "legacy"
-      ? chapters.filter((chapter) => chapter.legacy)
+    const visible =
+      activeFilter === "legacy" ? chapters.filter((chapter) => chapter.legacy)
+      : activeFilter === "featured" ? chapters.filter((chapter) => chapter.current)
       : chapters;
     catalog.innerHTML = visible
       .map((chapter) => {
         const items = filtered.filter((p) => chapter.categories.includes(p.category));
-        return items.length ? chapterHtml(chapter.title, chapter.summary, items) : "";
+        return items.length ? chapterHtml(chapter.title, chapter.summary, items, chapter.current) : "";
       })
       .join("");
     return;
@@ -308,209 +328,6 @@ if (heroName) {
   });
 }
 
-// --- Wandering Star with sparkle trail ---
-const _wanderingStar = document.getElementById("wandering-star");
-const hero = document.querySelector(".hero") as HTMLElement;
-
-if (_wanderingStar && hero) {
-  const wanderingStar = _wanderingStar; // capture as non-null for closures
-  const sparkleColors = ["#fa3768", "#79e2ff", "#fff", "#fac832", "#8b5cf6"];
-  let isMoving = false;
-
-  // Safe zones around the edges, avoiding center content and scroll indicator.
-  // Ordered clockwise so adjacent zones share edges (no crossing the center).
-  const isMobile = window.innerWidth <= 768;
-  const zones = isMobile
-    ? [
-        { top: [3, 10],  left: [5, 35] },    // 0: top-left
-        { top: [3, 10],  left: [65, 92] },   // 1: top-right
-        { top: [75, 88], left: [65, 92] },   // 2: bottom-right
-        { top: [75, 88], left: [5, 35] },    // 3: bottom-left
-      ]
-    : [
-        { top: [5, 15],  left: [5, 40] },    // 0: top-left
-        { top: [5, 15],  left: [60, 95] },   // 1: top-right
-        { top: [20, 55], left: [82, 95] },   // 2: right-upper
-        { top: [58, 78], left: [80, 95] },   // 3: right-lower
-        { top: [58, 78], left: [3, 18] },    // 4: left-lower
-        { top: [20, 55], left: [3, 16] },    // 5: left-upper
-      ];
-  let lastZone = isMobile ? 1 : 2; // start from right side
-  let currentSpeed = 0; // track travel speed for sparkle/glow intensity
-
-  function randomPos() {
-    // Pick an adjacent zone (±1 or ±2 steps) to avoid crossing center
-    const step = Math.random() < 0.6
-      ? (Math.random() < 0.5 ? 1 : -1)   // 60%: move 1 step
-      : (Math.random() < 0.5 ? 2 : -2);  // 40%: move 2 steps
-    lastZone = (lastZone + step + zones.length) % zones.length;
-    const zone = zones[lastZone];
-    return {
-      top: zone.top[0] + Math.random() * (zone.top[1] - zone.top[0]),
-      left: zone.left[0] + Math.random() * (zone.left[1] - zone.left[0]),
-    };
-  }
-
-  const glowEl = wanderingStar.querySelector(".wandering-star-glow") as HTMLElement;
-
-  // Move to a random spot, rest, repeat
-  function wanderStep() {
-    if (wanderingStar.classList.contains("open")) {
-      setTimeout(wanderStep, 500);
-      return;
-    }
-
-    const pos = randomPos();
-    const speed = 2.5 + Math.random() * 3; // 2.5–5.5s travel time
-    const rest = 2 + Math.random() * 3; // 2–5s rest at destination
-
-    // Speed intensity: shorter duration = faster movement = higher value (0–1)
-    currentSpeed = 1 - (speed - 2.5) / 3; // 1.0 at fastest (2.5s), 0.0 at slowest (5.5s)
-
-    isMoving = true;
-
-    // Scale glow size with speed — faster = bigger glow
-    const glowSize = 60 + currentSpeed * 60; // 60px at rest → 120px at max speed
-    gsap.to(glowEl, {
-      width: glowSize,
-      height: glowSize,
-      opacity: 0.5 + currentSpeed * 0.5,
-      duration: 0.6,
-      ease: "power2.out",
-    });
-
-    gsap.to(wanderingStar, {
-      top: `${pos.top}%`,
-      left: `${pos.left}%`,
-      duration: speed,
-      ease: "sine.inOut",
-      onComplete: () => {
-        isMoving = false;
-        currentSpeed = 0;
-
-        // Shrink glow back to resting size
-        gsap.to(glowEl, {
-          width: 60,
-          height: 60,
-          opacity: 0.5,
-          duration: 1,
-          ease: "power2.out",
-        });
-
-        setTimeout(wanderStep, rest * 1000);
-      },
-    });
-  }
-
-  // Start after initial appear delay
-  setTimeout(wanderStep, 2000);
-
-  // Spawn sparkle particles — size & spread scale with movement speed
-  function spawnSparkle() {
-    if (wanderingStar.classList.contains("open")) return;
-
-    const rect = wanderingStar.getBoundingClientRect();
-    const heroRect = hero.getBoundingClientRect();
-
-    const sparkle = document.createElement("div");
-    sparkle.className = "sparkle-particle";
-    const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
-
-    // Scale size with speed: 2-4px at rest → up to 3-9px at max speed
-    const size = 2 + currentSpeed * 3 + Math.random() * (2 + currentSpeed * 3);
-    const spread = 8 + currentSpeed * 12; // spawn spread around star center
-    const x = rect.left - heroRect.left + rect.width / 2 + (Math.random() - 0.5) * spread;
-    const y = rect.top - heroRect.top + rect.height / 2 + (Math.random() - 0.5) * spread;
-
-    const glowRadius = size * (2 + currentSpeed * 2);
-    sparkle.style.cssText = `
-      left: ${x}px; top: ${y}px;
-      width: ${size}px; height: ${size}px;
-      background: ${color};
-      box-shadow: 0 0 ${glowRadius}px ${color};
-    `;
-    hero.appendChild(sparkle);
-
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 20 + Math.random() * 30 + currentSpeed * 20; // faster = fling farther
-    const dx = Math.cos(angle) * dist;
-    const dy = Math.sin(angle) * dist;
-
-    gsap.to(sparkle, {
-      x: dx,
-      y: dy,
-      opacity: 0,
-      scale: 0,
-      duration: 0.5 + Math.random() * 0.6 + currentSpeed * 0.3,
-      ease: "power2.out",
-      onComplete: () => sparkle.remove(),
-    });
-  }
-
-  // Sparkle rate: scales with speed — faster movement = more frequent sparkles
-  function sparkleLoop() {
-    spawnSparkle();
-    // At max speed (1.0): ~60ms delay. At rest (0.0): ~450ms delay.
-    const delay = isMoving
-      ? 60 + (1 - currentSpeed) * 200 + Math.random() * 60
-      : 400 + Math.random() * 150;
-    setTimeout(sparkleLoop, delay);
-  }
-  setTimeout(sparkleLoop, 1500);
-
-  // Click to show popup, pause wandering
-  const popup = document.getElementById("wandering-star-popup")!;
-
-  wanderingStar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isOpening = !wanderingStar.classList.contains("open");
-    wanderingStar.classList.toggle("open");
-
-    if (isOpening) {
-      // Kill active movement so star stays put
-      gsap.killTweensOf(wanderingStar);
-      gsap.killTweensOf(glowEl);
-      isMoving = false;
-      currentSpeed = 0;
-
-      // Reset glow to resting state
-      gsap.to(glowEl, { width: 60, height: 60, opacity: 0.5, duration: 0.4 });
-
-      // Flip popup below star if near the top of the hero
-      const starRect = wanderingStar.getBoundingClientRect();
-      const heroRect = hero.getBoundingClientRect();
-      const spaceAbove = starRect.top - heroRect.top;
-
-      if (spaceAbove < 140) {
-        popup.style.bottom = "auto";
-        popup.style.top = "calc(100% + 16px)";
-        popup.classList.add("flipped");
-      } else {
-        popup.style.bottom = "calc(100% + 16px)";
-        popup.style.top = "auto";
-        popup.classList.remove("flipped");
-      }
-    } else {
-      // Resume wandering after closing
-      setTimeout(wanderStep, 1000);
-    }
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!wanderingStar.contains(e.target as Node) && wanderingStar.classList.contains("open")) {
-      wanderingStar.classList.remove("open");
-      setTimeout(wanderStep, 1000);
-    }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && wanderingStar.classList.contains("open")) {
-      wanderingStar.classList.remove("open");
-      setTimeout(wanderStep, 1000);
-    }
-  });
-}
-
 // --- Rainbow & Unicorn click effect (fountain style) ---
 (() => {
   const unicorns = ["🦄", "🌈", "✨", "💖", "⭐", "🌟", "💫"];
@@ -526,7 +343,7 @@ if (_wanderingStar && hero) {
   let holdX = 0;
   let holdY = 0;
 
-  // Fountain: particles arc upward then fall — single tween with physics-like cubic bezier
+  // Fountain: particles arc upward then fall, a single tween with physics-like cubic bezier
   function spawnFountain(x: number, y: number, count: number) {
     const toSpawn = Math.min(count, MAX_PARTICLES - activeParticles);
     if (toSpawn <= 0) return;
@@ -566,7 +383,7 @@ if (_wanderingStar && hero) {
       // Rotation: linear spin
       gsap.to(el, { rotation, duration: dur, ease: "none" });
 
-      // Vertical: single tween — up then down using a bezier-like custom ease
+      // Vertical: single tween, up then down using a bezier-like custom ease
       // cubic-bezier(0.2, 0.8, 0.6, -0.2) gives a natural throw arc
       gsap.to(el, {
         keyframes: [
@@ -591,7 +408,7 @@ if (_wanderingStar && hero) {
   }
 
   function isInteractive(target: HTMLElement) {
-    return !!target.closest("a, button, input, .wandering-star, .filter-tab, .icon-btn");
+    return !!target.closest("a, button, input, summary, .filter-tab, .icon-btn");
   }
 
   function startHold(x: number, y: number) {
@@ -646,6 +463,6 @@ if (_wanderingStar && hero) {
 })();
 
 // --- Init ---
-projectCount.textContent = `${projects.length + 1} projects`;
+projectCount.textContent = `${projects.length} projects`;
 setTabCounts();
 render();
